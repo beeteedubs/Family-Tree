@@ -1,0 +1,46 @@
+<html>
+  <head> </head>
+  <body>
+    <h1>First Heading</h1>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="index.js"></script>
+  </body>
+  <button class="btn Garp" onclick = "document.getElementsByClassName('btn Dragon')[0].style.display = 'block'">Monkey D. Garp</button> 
+  <style>
+  .Garp {
+    display: block;
+    width: 300px;
+    height: 500px;
+    border: none;
+    background-color: rgb(247, 247, 247);
+    padding: 14px 28px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+  }
+    .Garp:hover {
+      background-color: #ddd;
+  color: black;
+    }
+    </style>
+  <button class="btn Dragon" onclick = "document.getElementsByClassName('btn Luffy')[0].style.display = 'block', 
+  document.getElementsByClassName('btn Ace')[0].style.display = 'block', 
+  document.getElementsByClassName('btn Sabo')[0].style.display = 'block'">Monkey D. Dragon</button>
+  <button class="btn Luffy">Monkey D. Luffy</button>
+  <button class="btn Ace">Portgas D. Ace</button>
+  <button class="btn Sabo"> Sabo</button>
+ <style>
+   
+    .Dragon:hover {
+      background-color: #ddd;
+  color: black;}
+ </style>
+
+<script>document.getElementsByClassName('btn Dragon')[0].style.display = 'none'</script>
+<script>document.getElementsByClassName('btn Luffy')[0].style.display = 'none'</script>
+<script>document.getElementsByClassName('btn Ace')[0].style.display = 'none'</script>
+<script>document.getElementsByClassName('btn Sabo')[0].style.display = 'none'</script>
+
+
+
+<html>
