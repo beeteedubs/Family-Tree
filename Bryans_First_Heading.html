@@ -13,12 +13,26 @@
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="index.js"></script>
   </body>
-
-<input type="image" src="Garp.jpg" style = "vertical-align:middle" name="Garp" class="btTxt Garp" id="Garp" onclick = "document.getElementsByClassName('btTxt Dragon')[0].style.display = 'block'">
-<input type="image" src="Dragon.jpg" name="Garp" class="btTxt Dragon" id="Dragon" onclick = "document.getElementsByClassName('btTxt Luffy')[0].style.display = 'inline-block', document.getElementsByClassName('btTxt Ace')[0].style.display = 'inline-block', document.getElementsByClassName('btTxt Sabo')[0].style.display = 'inline-block'">
-<input type="image" src="Luffy.jpg" name="Garp" class="btTxt Luffy" id="Luffy">
-<input type = "image" src="Ace.jpg" name="Ace" class="btTxt Ace" id = "Ace">
-<input type="image" src="Sabo.jpg" name="Sabo" class="btTxt Sabo" id = "Sabo">
+<style>
+  .singlediv {
+  margin-top: 100px;
+  margin-bottom: 100px;
+  margin-left: 500px;}
+  .triplediv {
+    margin-top: 100px;
+    margin-bottom: 100px;
+    margin-left: 300px;
+  }
+  </style>
+  <div class = "singlediv">
+    <input type="image"    src="Garp.jpg" style = "vertical-align:middle" name="Garp" class="btTxt Garp" id="Garp" onclick = "document.getElementsByClassName('btTxt Dragon')[0].style.display = 'block'"> 
+    <input type="image" src="Dragon.jpg" name="Garp" class="btTxt Dragon" id="Dragon" onclick = "document.getElementsByClassName('btTxt Luffy')[0].style.display = 'inline-block', document.getElementsByClassName('btTxt Ace')[0].style.display = 'inline-block', document.getElementsByClassName('btTxt Sabo')[0].style.display = 'inline-block'">
+  </div>
+<div class = "triplediv">
+  <input type="image" src="Luffy.jpg" name="Garp" class="btTxt Luffy" id="Luffy">
+  <input type = "image" src="Ace.jpg" name="Ace" class="btTxt Ace" id = "Ace">
+  <input type="image" src="Sabo.jpg" name="Sabo" class="btTxt Sabo" id = "Sabo"> 
+</div>
 <script>document.getElementsByClassName('btTxt Dragon')[0].style.display = 'none'</script>
 <script>document.getElementsByClassName('btTxt Luffy')[0].style.display = 'none'</script>
 <script>document.getElementsByClassName('btTxt Ace')[0].style.display = 'none'</script>
