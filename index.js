@@ -19,16 +19,13 @@ function createButtons(jsonFile) {
     // document.getElementById("output").innerHTML = output;
     console.log(key);
     console.log(jsonFile[key]);
-    // output += `<button class = button test> ${key} </button>`;
     var tag = document.createElement("button");
     var buttName = document.createTextNode(`${key}`);
     tag.appendChild(buttName);
-    var att = document.createAttribute("class"); // Create a "class" attribute
-    // att.value = "democlass"; // Set the value of the class attribute
-    tag.setAttributeNode(att);
+    // var att = document.createAttribute("class"); // Create a "class" attribute
+    //tag.setAttributeNode(att);
     document.body.appendChild(tag);
   }
-  // document.body.innerHTML = output;
 }
 
 /* Function to add style element */
@@ -44,16 +41,16 @@ function addStyle(styles) {
 
   /* Append style to the tag name */
 
-  document.getElementsByTagName("head")[0].appendChild(css);
+  document.getElementsByTagName("button")[0].appendChild(css);
 }
 
 /* Set the style */
 
-var styles = "h1 { color: green }";
-styles += " body { text-align: center }";
+var styles = "button { color: green }";
+styles += " button { text-align: center }";
 
 /* Function call */
 
-// window.onload = function () {
-//   addStyle(styles);
-// };
+window.onload = function () {
+  addStyle(styles);
+};
