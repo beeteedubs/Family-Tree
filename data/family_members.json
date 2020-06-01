@@ -1,7 +1,7 @@
 [
   {
-    "Grandpa1": {
-      "Name": "Grandpa1",
+    "Grandpa": {
+      "Name": "Grandpa",
       "Gender": "male",
       "Age": 80,
       "Birthday": "01/01/1940",
@@ -10,12 +10,12 @@
       "Mom": null,
       "Deceased": false
     },
-    "Grandma1": {
-      "Name": "Grandma1",
+    "Grandma": {
+      "Name": "Grandma",
       "Gender": "female",
       "Age": 80,
       "Photo": null,
-      "Spouse": "Grandpa1",
+      "Spouse": "Grandpa",
       "Birthday": "01/01/1940",
       "Kids": ["Husband"],
       "Dad": null,
@@ -30,8 +30,8 @@
       "Spouse": "Wife",
       "Birthday": "01/01/1980",
       "Kids": ["Kid1, Kid2"],
-      "Dad": "Grandpa1",
-      "Mom": "Grandma1",
+      "Dad": "Grandpa",
+      "Mom": "Grandma",
       "Deceased": false
     },
     "Wife": {
@@ -42,8 +42,8 @@
       "Spouse": "Husband",
       "Birthday": "01/01/1980",
       "Kids": ["Kid1, Kid2"],
-      "Dad": "Grandpa2",
-      "Mom": "Grandma2",
+      "Dad": "Grandpa",
+      "Mom": "Grandma",
       "Deceased": false
     }
   }

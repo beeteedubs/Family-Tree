@@ -1,5 +1,9 @@
 // d3.select("h1").style("color", "red");
+
 let mainObj = {};
+
+// Read in JSON file to mainObj
+// Also creates buttons
 fetch("./data/family_members.json")
   .then(function (response) {
     return response.json();
@@ -25,9 +29,33 @@ function createButtons(jsonFile) {
     var buttName = document.createTextNode(`${key}`);
     tag.appendChild(buttName);
     var att = document.createAttribute("class"); // Create a "class" attribute
-    //tag.setAttributeNode(att);
+    att.value = key;
+    tag.setAttributeNode(att);
     document.body.appendChild(tag);
   }
+
+  // "grandpa" and "grandma" are visible from beginning
+  var grandpa = document.getElementsByClassName("Grandpa")[0];
+  var grandma = document.getElementsByClassName("Grandma")[0];
+  var husband = document.getElementsByClassName("Husband")[0];
+  var wife = document.getElementsByClassName("Wife")[0];
+
+  grandpa.style.backgroundImage = "url('data/Grandpa.jpg')";
+  grandma.style.backgroundImage = "url('data/Grandma.jpg')";
+  husband.style.backgroundImage = "url('data/Husband.jpg')";
+  wife.style.backgroundImage = "url('data/Wife.jpg')";
+
+  // grandpa.onclick = 'wife.style.visibility = "visible"';
+  // grandma.onclick = wife.style.visibility = "visible";
+  var grandpa_attribute = document.createAttribute("onclick");
+  granpda.onclick = function () {
+    wife.style.visibility = "visible";
+  };
+  // grandpa_attribute = 'wife.style.visibility = "visible";'
+  // grandpa.setAttribute(grandpa_attribute);
+
+  wife.style.visibility = "hidden";
+  husband.style.visibility = "hidden";
 }
 
 /* Function to add style element */
@@ -50,11 +78,9 @@ function addStyle(styles) {
 
 var styles = "button { color: black }";
 styles += " button { text-align: center }";
-styles += " button {background-color: rgb(200, 4, 99)}";
 styles += " button {width: 500px}";
 styles += " button {height: 500px}";
 styles += " button {border: 33 px blue}";
-styles += " button {background: url(data/test.png)}";
 
 /* Function call */
 
