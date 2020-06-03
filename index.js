@@ -45,10 +45,10 @@ function createButtons(jsonFile) {
   husband.style.backgroundImage = "url('data/Husband.jpg')";
   wife.style.backgroundImage = "url('data/Wife.jpg')";
 
-  // grandpa.onclick = 'wife.style.visibility = "visible"';
+  //grandpa.onclick = 'wife.style.visibility = "visible"';
   // grandma.onclick = wife.style.visibility = "visible";
   var grandpa_attribute = document.createAttribute("onclick");
-  granpda.onclick = function () {
+  grandpa.onclick = function () {
     wife.style.visibility = "visible";
   };
   // grandpa_attribute = 'wife.style.visibility = "visible";'
@@ -78,9 +78,8 @@ function addStyle(styles) {
 
 var styles = "button { color: black }";
 styles += " button { text-align: center }";
-styles += " button {width: 500px}";
-styles += " button {height: 500px}";
-styles += " button {border: 33 px blue}";
+styles += " button {width: 200px}";
+styles += " button {height: 300px}";
 
 /* Function call */
 
