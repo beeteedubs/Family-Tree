@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<!-- Based on Crypters Infotech Video  -->
+<html>
+
+<head>
+    <h1>Family Tree Crypters InfoTech</h1>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <!-- <script> margin = ({ top: 10, right: 120, bottom: 10, left: 40 })</script> -->
+    <style>
+        rect {
+            fill: none;
+            stroke: silver;
+            width: 80px;
+            height: 40px;
+            stroke-width: 3px;
+        }
+
+        path {
+            fill: none;
+            stroke: black;
+        }
+
+        text {
+            dominant-baseline: middle;
+            text-anchor: middle;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        // What this do?
+        var svg = d3.select("body").append("svg")
+            .attr("width", 600).attr("height", 500)
+            .append("g").attr("transform", "translate(50,50)");
+
+        var data = [
+            { "child": "Grandpa", "parent": "", "spouse": "Grandma", "Generation": 1 },
+            {
+                "child": "Husband",
+                "parent": "Grandpa",
+                "spouse": "Wife",
+                "Generation": 2
+            },
+            { "child": "Wife", "parent": "Grandpa", "spouse": "Husband", "Generation": 2 },
+            // { "child": "Grandma", "parent": "", "spouse": "Grandpa", "Generation": 1 }
+        ];
+
+        // Molds the data
+        var dataStructure = d3.stratify()
+            .id(function (d) { return d.child; })
+            .parentId(function (d) { return d.parent; })(data);
+        var treeStructure = d3.tree().size([500, 300]);
+        var information = treeStructure(dataStructure);
+        console.log(information.descendants());
+
+        // Creates the boxes to represent nodes
+        var rectangles = svg.append("g").selectAll("rect")
+            .data(information.descendants());
+        rectangles.enter().append("rect")
+            .attr("x", function (d) { return d.x - 40; }) //how not hardcode 40 and 20?
+            .attr("y", function (d) { return d.y - 20; });
+
+        // Path drawing stuff
+        var connections = svg.append("g").selectAll("path")
+            .data(information.links());
+        connections.enter().append("path")
+            .attr("d", function (d) {
+                return "M" + d.source.x + "," + d.source.y + "C" + d.source.x
+                    + "," + (d.source.y + d.target.y) / 2 + " "
+                    + d.target.x + "," + (d.source.y + d.target.y) / 2 + " "
+                    + d.target.x + "," + d.target.y;
+            });
+
+        var names = svg.append("g").selectAll("text")
+            .data(information.descendants());
+        names.enter().append("text")
+            .text(function (d) { return d.data.child; })
+            .attr("x", function (d) { return d.x; })
+            .attr("y", function (d) { return d.y; })
+    </script>
+</body>
+
+</html>

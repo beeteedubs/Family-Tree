@@ -16,8 +16,8 @@ fetch("./data/family_members.json")
 
 function createButtons(jsonFile) {
   for (let key in jsonFile) {
-    console.log(key);
-    console.log(jsonFile[key]);
+    // console.log(key);
+    // console.log(jsonFile[key]);
 
     var tag = document.createElement("button");
     var buttName = document.createTextNode(`${key}`);
@@ -84,7 +84,7 @@ function positionButtons(jsonFile) {
       let ycoord = 200;
       num_gen_2 += 1;
     }
-    d3.select("body").append("g").attr("transform", translateY(200));
+    d3.select("body").append("g").attr("transform", "translateY(200)");
 
     // i x = 200i
 
@@ -110,5 +110,4 @@ styles += " button {height: 300px}";
 
 window.onload = function () {
   addStyle(styles);
-  positionButtons(jsonFile);
 };

@@ -1,0 +1,11 @@
+[
+  { "child": "Grandpa", "parent": "", "spouse": "Grandma", "Generation": 1 },
+  {
+    "child": "Husband",
+    "parent": "Grandpa",
+    "spouse": "Wife",
+    "Generation": 2
+  },
+  { "child": "Wife", "parent": "", "spouse": "Husband", "Generation": 2 },
+  { "child": "Grandma", "parent": "", "spouse": "Grandpa", "Generation": 1 }
+]
