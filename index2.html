@@ -8,7 +8,7 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <!-- <script> margin = ({ top: 10, right: 120, bottom: 10, left: 40 })</script> -->
     <style>
-        rect {
+        image {
             fill: white;
             stroke: silver;
             width: 80px;
@@ -59,16 +59,18 @@
 
         // self-explanatory
         var familytree_Steve = [
-            { "name": "Steve", "parent": "", "spouse": "Shirley", "Generation": 1 },
-            { "name": "Alex", "parent": "Steve", "spouse": "Alexis", "Generation": 2 },
-            { "name": "Jocelyn", "parent": "Steve", "spouse": "Johnny", "Generation": 3 },
+            {
+                "name": "Steve", "parent": "", "spouse": "Shirley", "Generation": 1, "img": "data/Grandpa.jpg", "spouse_img": "data/Grandma.jpg"
+            },
+            { "name": "Alex", "parent": "Steve", "spouse": "Alexis", "Generation": 2, "img": "data/Grandpa.jpg", "spouse_img": "data/Grandma.jpg" },
+            { "name": "Jocelyn", "parent": "Steve", "spouse": "Johnny", "Generation": 3, "img": "data/Grandma.jpg", "spouse_img": "data/Grandma.jpg" },
             //{ "name": "Johnny", "parent": "", "spouse": "Jocelyn", "Generation": 2 },
             //{ "name": "Johnny", "parent": "", "spouse": "Jocelyn", "Generation": 2 },
             //{ "name": "Alexis", "parent": "Alexandra", "spouse": "Alex", "Generation": 2 },
             //{ "name": "Shirley", "parent": "", "spouse": "Steve", "Generation": 1 },
-            { "name": "Ingrid", "parent": "Alex", "Generation": 3 },
-            { "name": "Sasha", "parent": "Alex", "Generation": 3 },
-            { "name": "Suzie Q", "parent": "Jocelyn", "Generation": 3 }
+            { "name": "Ingrid", "parent": "Alex", "Generation": 3, "img": "data/Grandma.jpg", },
+            { "name": "Sasha", "parent": "Alex", "Generation": 3, "img": "data/Grandpa.jpg", },
+            { "name": "Suzie Q", "parent": "Jocelyn", "Generation": 3, "img": "data/Grandma.jpg", }
         ];
 
         // Molds the data,
@@ -123,20 +125,37 @@
 
 
         // Creates the boxes to represent nodes
-        var rectangles = svg.append("g").selectAll("rect")
+
+        var rectangles = svg.append("g").selectAll("image")
             .data(information.descendants());
-        rectangles.enter().append("rect")
+        rectangles.enter().append("image")
             .attr("x", function (d) { return d.x - 60; }) //how not hardcode 40 and 20? make variables gloablly in non-script tags?
             .attr("y", function (d) { return d.y - 20; })
+            .attr("width", function (d) { return 80; })
+            .attr("height", function (d) { return 40; })
+            .attr("href", function (d) {
+                var out = d.data.img;
+                return out;
+            })
+            .on("mousedown", function (d) {
+                d3.select("#details")
+                    .style("visibility", "visible")
+                    .html(function () {
+                        if (d.data.spouse != undefined)
+                            return "Spouse: " + d.data.spouse;
+                        else
+                            return "No Spouse";
+                    });
+            })
         // .on("mousedown", function (d) {
-        //     d3.select("#details")
-        //         .style("visibility", "visible")
-        //         .html(function () {
-        //             if (d.data.spouse != undefined)
-        //                 return "Spouse: " + d.data.spouse;
-        //             else
-        //                 return "No Spouse";
-        //         });
+        // d3.select("#details")
+        //     .style("visibility", "visible")
+        //     .html(function () {
+        //         if (d.data.spouse != undefined)
+        //             return "Spouse: " + d.data.spouse;
+        //         else
+        //             return "No Spouse";
+        //     });
         // })
         // .on("mouseup", function () {
         //     d3.select("#details").style("visibility","hidden");
@@ -153,6 +172,11 @@
                 else
                     return false;
             });
+
+        // var pictures = svg.append("g").selectAll("img")
+        //     .data(information.descendants());
+        // pictures.enter().append("img")
+        //     .img(function (d) { return d.data.img; });
 
         var names = svg.append("g").selectAll("text")
             .data(information.descendants());
