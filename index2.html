@@ -1,5 +1,14 @@
 <!DOCTYPE html>
+<!-- 
 
+
+
+
+
+
+
+    NEW CHANGES
+ -->
 <!-- Based on Crypters Infotech Video  -->
 <html>
 
@@ -7,6 +16,7 @@
     <h1>Family Tree Crypters InfoTech</h1>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <!-- <script> margin = ({ top: 10, right: 120, bottom: 10, left: 40 })</script> -->
+    <!-- try to create global variables for the hight and width of the images/boxes-->
     <style>
         rect {
             fill: white;
@@ -14,6 +24,7 @@
             width: 80px;
             height: 40px;
             stroke-width: 3px;
+            visibility: hidden;
         }
 
         path {
@@ -34,10 +45,24 @@
         .hide {
             visibility: hidden;
         }
+        #details{
+            visibility: hidden;
+            position: absolute;
+            left:320px;
+            width:200px;
+            height:30px;
+            background: gray;
+            color:white;
+            border-radius: 15px;
+            text-align: center;
+            padding:15px;
+            font-size:20px;
+        }
     </style>
 </head>
-
 <body>
+    <div id="details"></div>
+    <div id ="rect"></div>
     <script>
         /* PSEUDOCODE
         
@@ -48,9 +73,12 @@
         Create paths
         
         */
-
-
-
+        const img_width = 500;
+        const img_height = 200;
+        d3.select("rect").style("visibility","visible")
+            .style("width", img_width + "px")
+            .style("height", img_height + "px");
+         console.log(d3.select("rect"));
 
         // creates a frame 600x600 px to work in, all elements shifted ↓ & → 50 px
         var svg = d3.select("body").append("svg")
@@ -68,7 +96,7 @@
             //{ "name": "Shirley", "parent": "", "spouse": "Steve", "Generation": 1 },
             { "name": "Ingrid", "parent": "Alex", "Generation": 3 },
             { "name": "Sasha", "parent": "Alex", "Generation": 3 },
-            { "name": "Suzie Q", "parent": "Jocelyn", "Generation": 3 }
+            { "name": "Suzie Qu", "parent": "Jocelyn", "Generation": 3 }
         ];
 
         // Molds the data,
@@ -128,19 +156,19 @@
         rectangles.enter().append("rect")
             .attr("x", function (d) { return d.x - 60; }) //how not hardcode 40 and 20? make variables gloablly in non-script tags?
             .attr("y", function (d) { return d.y - 20; })
-        // .on("mousedown", function (d) {
-        //     d3.select("#details")
-        //         .style("visibility", "visible")
-        //         .html(function () {
-        //             if (d.data.spouse != undefined)
-        //                 return "Spouse: " + d.data.spouse;
-        //             else
-        //                 return "No Spouse";
-        //         });
-        // })
-        // .on("mouseup", function () {
-        //     d3.select("#details").style("visibility","hidden");
-        // });;
+        .on("mousedown", function (d) {
+            d3.select("#details")
+                .style("visibility", "visible")
+                .html(function () {
+                    if (d.data.spouse != undefined)
+                        return "Spouse: " + d.data.spouse;
+                    else
+                        return "No Spouse";
+                });
+        })
+        .on("mouseup", function () {
+            d3.select("#details").style("visibility","hidden");
+        });
 
         var spouseRectangles = svg.append("g").selectAll("rect")
             .data(information.descendants());
