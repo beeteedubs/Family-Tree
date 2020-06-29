@@ -41,30 +41,18 @@
 
 <body>
     <script>
-        /* PSEUDOCODE
-        
-        Create framework boundaries (i.e. svg and tree boundaries like canvas and painting)
-        Load data
-        Create text
-        Create boxes
-        Create paths
-        
-        */
+
         var img_height = 100;
         var img_width = 200;
-        // image.style.height = img_height + "px";
-        // image.style.width = img_width + "px";
 
-        // creates a frame 600x600 px to work in, all elements shifted ↓ & → 50 px
+        // creates a frame px to work in, all elements shifted ↓ & → 50 px
         var svg = d3.select("body").append("svg")
             .attr("width", 2000).attr("height", 2000)
             .append("g").attr("transform", "translate(50,50)");//can comment out ot show signif
 
         // self-explanatory
         var familytree_Steve = [
-            {
-                "name": "Steve", "parent": "", "spouse": "Shirley", "Generation": 1, "img": "data/Grandpa.jpg", "spouse_img": "data/Grandma.jpg"
-            },
+            { "name": "Steve", "parent": "", "spouse": "Shirley", "Generation": 1, "img": "data/Grandpa.jpg", "spouse_img": "data/Grandma.jpg" },
             { "name": "Alex", "parent": "Steve", "spouse": "Alexis", "Generation": 2, "img": "data/Grandpa.jpg", "spouse_img": "data/Grandma.jpg" },
             { "name": "Jocelyn", "parent": "Steve", "spouse": "Johnny", "Generation": 3, "img": "data/Grandma.jpg", "spouse_img": "data/Grandpa.jpg" },
             //{ "name": "Johnny", "parent": "", "spouse": "Jocelyn", "Generation": 2 },
@@ -80,17 +68,20 @@
         var dataStructure = d3.stratify()
             .id(function (d) { return d.name; }) //the name in "d.name" needs to match data
             .parentId(function (d) { return d.parent; })(familytree_Steve);
-        // const tree_x = (2 ^ (information.descendants().height + 1))*50
         console.log(dataStructure);
-        const tree_y = 100 * (dataStructure.height + 1);
-        const tree_x = (2 ** (dataStructure.height + 1)) * 150;// variablize 150 to change based on number of ppl in tree so everyone is spaced out properly
+
+
+        const tree_y = 125 * (dataStructure.height + 1);
+        // variablize 150 to change based on number of ppl in tree so everyone is spaced out properly
+        const tree_x = (2 ** (dataStructure.height + 1)) * 125;
         console.log("tree_y: " + tree_y);
         console.log("tree_x: " + tree_x);
 
         var treeStructure = d3.tree().size([tree_x, tree_y]);
 
-        var information = treeStructure(dataStructure); //??? doesn't seem necessary according to prints of descendants and links
+        //??? doesn't seem necessary according to prints of descendants and links
         // But if we dont use it, the code doent work
+        var information = treeStructure(dataStructure);
         // console.log(treeStructure)
         console.log(information.descendants());
         console.log(information.links());
@@ -101,19 +92,16 @@
 
 
 
-
-
-
-
-
         // Path drawing stuff??? why 20 -> variablize later with once we decide dimensions of buttons
         var connections = svg.append("g").selectAll("path")
             .data(information.links());
+
         connections.enter().append("path")
             .attr("d", function (d) {
                 // start pt, control pt, 2nd control pt, end pt for curved path
+                // CHANGE: d.source.x + wat t obe
                 return "M" + (d.source.x + img_height) + "," + (d.source.y) +
-                    " v  " + img_height +
+                    " v  " + (img_height - 10) +
                     "H" + (d.target.x - (img_height / 2)) +
                     " V" + d.target.y;
 
