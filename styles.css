@@ -1,0 +1,36 @@
+path {
+  fill: none;
+  stroke: silver;
+  stroke-width: 3px;
+}
+
+text {
+  text-anchor: middle;
+  color: rgb(221, 36, 36); /*no diff*/
+  font-family: serif;
+}
+
+/* Above this line means does something noticeable */
+
+.image {
+  fill: black;
+  stroke: silver;
+  background-size: contain;
+  border-radius: 20px;
+}
+.container {
+  margin: auto;
+}
+
+.cover {
+  background-size: cover;
+}
+
+.bigger {
+  font-size: 20px;
+  color: rgb(126, 37, 37);
+}
+
+.hide {
+  visibility: hidden;
+}
