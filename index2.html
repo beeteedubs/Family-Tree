@@ -10,13 +10,12 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <!-- <script> margin = ({ top: 10, right: 120, bottom: 10, left: 40 })</script> -->
     <style>
-        image {
+        /* image {
             fill: white;
             stroke: silver;
-            width: 80px;
-            height: 40px;
-            stroke-width: 3px;
-        }
+            /* width: 80px; */
+        /* height: 40px; */
+
 
         path {
             fill: none;
@@ -50,9 +49,10 @@
         Create paths
         
         */
-
-
-
+        var img_height = 80;
+        var img_width = 160;
+        // image.style.height = img_height + "px";
+        // image.style.width = img_width + "px";
 
         // creates a frame 600x600 px to work in, all elements shifted ↓ & → 50 px
         var svg = d3.select("body").append("svg")
@@ -65,7 +65,7 @@
                 "name": "Steve", "parent": "", "spouse": "Shirley", "Generation": 1, "img": "data/Grandpa.jpg", "spouse_img": "data/Grandma.jpg"
             },
             { "name": "Alex", "parent": "Steve", "spouse": "Alexis", "Generation": 2, "img": "data/Grandpa.jpg", "spouse_img": "data/Grandma.jpg" },
-            { "name": "Jocelyn", "parent": "Steve", "spouse": "Johnny", "Generation": 3, "img": "data/Grandma.jpg", "spouse_img": "data/Grandma.jpg" },
+            { "name": "Jocelyn", "parent": "Steve", "spouse": "Johnny", "Generation": 3, "img": "data/Grandma.jpg", "spouse_img": "data/Grandpa.jpg" },
             //{ "name": "Johnny", "parent": "", "spouse": "Jocelyn", "Generation": 2 },
             //{ "name": "Johnny", "parent": "", "spouse": "Jocelyn", "Generation": 2 },
             //{ "name": "Alexis", "parent": "Alexandra", "spouse": "Alex", "Generation": 2 },
@@ -90,12 +90,20 @@
 
         var information = treeStructure(dataStructure); //??? doesn't seem necessary according to prints of descendants and links
         // But if we dont use it, the code doent work
-
+        // console.log(treeStructure)
         console.log(information.descendants());
         console.log(information.links());
         // looking at log info:
         // height: how many layers of descedants r directly below this node
         // depth: how many above, opposite to height
+
+
+
+
+
+
+
+
 
         // Path drawing stuff??? why 20 -> variablize later with once we decide dimensions of buttons
         var connections = svg.append("g").selectAll("path")
@@ -103,9 +111,9 @@
         connections.enter().append("path")
             .attr("d", function (d) {
                 // start pt, control pt, 2nd control pt, end pt for curved path
-                return "M" + (d.source.x + 40) + "," + (d.source.y) +
-                    " v 40 " +
-                    "H" + (d.target.x - 20) +
+                return "M" + (d.source.x + (img_width / 2)) + "," + (d.source.y) +
+                    " v  " + img_height +
+                    "H" + (d.target.x - (img_height / 2)) +
                     " V" + d.target.y;
 
                 //"C" + d.source.x
@@ -120,7 +128,7 @@
             .attr("d", function (d) {
                 return "M" + (d.source.x) + ',' + (d.source.y) +
                     "v 0" +
-                    "h 80";
+                    "h " + img_height * 2;
 
             })
 
@@ -131,25 +139,16 @@
         var rectangles = svg.append("g").selectAll("image")
             .data(information.descendants());
         rectangles.enter().append("image")
-            .attr("x", function (d) { return d.x - 60; }) //how not hardcode 40 and 20? make variables gloablly in non-script tags?
-            .attr("y", function (d) { return d.y - 20; })
-            .attr("width", function (d) { return 80; })
-            .attr("height", function (d) { return 40; })
+            .attr("x", function (d) { return d.x - ((img_width + img_height) / 2); }) //how not hardcode 40 and 20? make variables gloablly in non-script tags?
+            .attr("y", function (d) { return d.y - (img_height / 2); })
+            .attr('height', img_height).attr('width', img_width)
+            // .attr("width", function (d) { return img_height; })
+            // .attr("height", function (d) { return img_width; })
             .attr("href", function (d) {
                 var out = d.data.img;
                 return out;
             })
 
-            .on("mousedown", function (d) {
-                d3.select("#details")
-                    .style("visibility", "visible")
-                    .html(function () {
-                        if (d.data.spouse != undefined)
-                            return "Spouse: " + d.data.spouse;
-                        else
-                            return "No Spouse";
-                    });
-            })
         // .on("mousedown", function (d) {
         // d3.select("#details")
         //     .style("visibility", "visible")
@@ -164,12 +163,17 @@
         //     d3.select("#details").style("visibility","hidden");
         // });;
 
-        var spouseRectangles = svg.append("g").selectAll("rect")
+        var spouseRectangles = svg.append("g").selectAll("image")
             .data(information.descendants());
-        spouseRectangles.enter().append("rect")
-            .attr("x", function (d) { return d.x + 60; })
-            .attr("y", function (d) { return d.y - 20; })
-            .classed("hide", function (d) {
+        spouseRectangles.enter().append("image")
+            .attr("x", function (d) { return d.x + ((img_width + img_height) / 2); })
+            .attr("y", function (d) { return d.y - (img_height / 2); })
+            .attr('height', img_height).attr('width', img_width)
+            .attr("href", function (d) {
+                var out = d.data.spouse_img;
+                return out;
+            })
+            .classed("hide", function (d) { // prevents spouse rect from appearing for ppl w/out spouses
                 if (d.data.spouse == undefined)
                     return true;
                 else
@@ -185,7 +189,7 @@
             .data(information.descendants());
         names.enter().append("text")
             .text(function (d) { return d.data.name; })
-            .attr("x", function (d) { return d.x - 20; })
+            .attr("x", function (d) { return d.x - (img_height / 2); })
             .attr("y", function (d) { return d.y; })
             .classed("bigger", true);
 
@@ -193,7 +197,7 @@
             .data(information.descendants());
         spouseNames.enter().append("text")
             .text(function (d) { return d.data.spouse; })
-            .attr("x", function (d) { return d.x + 100; })
+            .attr("x", function (d) { return d.x + (img_width + (img_height / 2)); })
             .attr("y", function (d) { return d.y; })
             .classed("bigger", true);
     </script>
