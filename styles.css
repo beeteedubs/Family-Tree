@@ -10,16 +10,19 @@ text {
   font-family: serif;
 }
 
+.container {
+  margin: auto;
+  /* width: 90%; */
+  border: 5px red solid;
+}
+
 /* Above this line means does something noticeable */
 
-.image {
+image {
   fill: black;
   stroke: silver;
   background-size: contain;
   border-radius: 20px;
-}
-.container {
-  margin: auto;
 }
 
 .cover {

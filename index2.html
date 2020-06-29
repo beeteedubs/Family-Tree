@@ -15,13 +15,12 @@
 
             var img_height = 100;
             var img_width = 200;
-
+            container = document.getElementsByClassName('container')[0]
             // creates a frame px to work in, all elements shifted ↓ & → 50 px
-            var svg = d3.select("b").append("svg")
+            var svg = d3.select(container).append("svg")
                 .attr("width", 2000).attr("height", 2000)
                 .append("g").attr("transform", "translate(50,50)");//can comment out ot show signif
-            container = document.getElementsByClassName('container')
-            container.append(svg)
+
             // self-explanatory
             var familytree_Steve = [
                 { "name": "Steve", "parent": "", "spouse": "Shirley", "Generation": 1, "img": "data/Grandpa.jpg", "spouse_img": "data/Grandma.jpg" },
