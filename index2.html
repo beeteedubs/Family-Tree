@@ -10,11 +10,15 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <!-- <script> margin = ({ top: 10, right: 120, bottom: 10, left: 40 })</script> -->
     <style>
-        /* image {
-            fill: white;
+        .image {
+            fill: black;
             stroke: silver;
-            /* width: 80px; */
-        /* height: 40px; */
+            background-size: contain;
+        }
+
+        .cover {
+            background-size: =cover
+        }
 
 
         path {
@@ -24,8 +28,9 @@
         }
 
         text {
-            dominant-baseline: middle;
+
             text-anchor: middle;
+            color: rgb(255, 255, 255);
         }
 
         .bigger {
@@ -49,8 +54,8 @@
         Create paths
         
         */
-        var img_height = 80;
-        var img_width = 160;
+        var img_height = 100;
+        var img_width = 200;
         // image.style.height = img_height + "px";
         // image.style.width = img_width + "px";
 
@@ -82,7 +87,7 @@
         // const tree_x = (2 ^ (information.descendants().height + 1))*50
         console.log(dataStructure);
         const tree_y = 100 * (dataStructure.height + 1);
-        const tree_x = (2 ** (dataStructure.height + 1)) * 100;
+        const tree_x = (2 ** (dataStructure.height + 1)) * 150;// variablize 150 to change based on number of ppl in tree so everyone is spaced out properly
         console.log("tree_y: " + tree_y);
         console.log("tree_x: " + tree_x);
 
@@ -111,7 +116,7 @@
         connections.enter().append("path")
             .attr("d", function (d) {
                 // start pt, control pt, 2nd control pt, end pt for curved path
-                return "M" + (d.source.x + (img_width / 2)) + "," + (d.source.y) +
+                return "M" + (d.source.x + img_height) + "," + (d.source.y) +
                     " v  " + img_height +
                     "H" + (d.target.x - (img_height / 2)) +
                     " V" + d.target.y;
@@ -142,6 +147,7 @@
             .attr("x", function (d) { return d.x - ((img_width + img_height) / 2); }) //how not hardcode 40 and 20? make variables gloablly in non-script tags?
             .attr("y", function (d) { return d.y - (img_height / 2); })
             .attr('height', img_height).attr('width', img_width)
+            .attr('class', 'image')
             // .attr("width", function (d) { return img_height; })
             // .attr("height", function (d) { return img_width; })
             .attr("href", function (d) {
@@ -191,7 +197,7 @@
             .text(function (d) { return d.data.name; })
             .attr("x", function (d) { return d.x - (img_height / 2); })
             .attr("y", function (d) { return d.y; })
-            .classed("bigger", true);
+        // .classed("bigger", true);
 
         var spouseNames = svg.append("g").selectAll("text")
             .data(information.descendants());
