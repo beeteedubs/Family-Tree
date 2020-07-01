@@ -31,7 +31,8 @@
                 //{ "name": "Shirley", "parent": "", "spouse": "Steve", "Generation": 1 },
                 { "name": "Ingrid", "parent": "Alex", "Generation": 3, "img": "data/Grandma.jpg", },
                 { "name": "Sasha", "parent": "Alex", "Generation": 3, "img": "data/Grandpa.jpg", },
-                { "name": "Suzie Q", "parent": "Jocelyn", "Generation": 3, "img": "data/Grandma.jpg", }
+                { "name": "Suzie Q", "parent": "Jocelyn", "Generation": 3, "img": "data/Grandma.jpg", },
+                
             ];
 
             // Molds the data,
@@ -41,14 +42,16 @@
             console.log(dataStructure);
 
 
-            const tree_y = 125 * (dataStructure.height + 1);
+            const tree_y = img_height * (dataStructure.height + 1);
             // variablize 150 to change based on number of ppl in tree so everyone is spaced out properly
-            const tree_x = (2 ** (dataStructure.height + 1)) * 125;
+            const tree_x = (2 ** (dataStructure.height + 1)) * img_width;
             console.log("tree_y: " + tree_y);
             console.log("tree_x: " + tree_x);
 
             // painting size, careful don't go too far, should not be bigger tha canvas size or svg size
             var treeStructure = d3.tree().size([tree_x, tree_y]);
+
+            var zoom = d3.zoom()
 
             //??? doesn't seem necessary according to prints of descendants and links
             // But if we dont use it, the code doent work
@@ -162,6 +165,8 @@
                 .attr("x", function (d) { return d.x + (img_width + (img_height / 2)); })
                 .attr("y", function (d) { return d.y; })
                 .classed("bigger", true);
+
+              
         </script>
     </div>
 
