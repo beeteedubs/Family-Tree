@@ -17,10 +17,10 @@
             var img_width = 200;
             container = document.getElementsByClassName('container')[0]
             // creates a frame px to work in, all elements shifted ↓ & → 50 px
-            var svg = d3.select(container).append("svg")
+            var svg = d3.select("body").append("svg")
                 .attr("width", 2000).attr("height", 2000)
                 .append("g").attr("transform", "translate(50,50)");//can comment out ot show signif
-
+            d3 = require("d3@5")
             // self-explanatory
             var familytree_Steve = [
                 { "name": "Steve", "parent": "", "spouse": "Shirley", "Generation": 1, "img": "data/Grandpa.jpg", "spouse_img": "data/Grandma.jpg" },
@@ -42,9 +42,9 @@
             console.log(dataStructure);
 
 
-            const tree_y = 125 * (dataStructure.height + 1);
+            const tree_y = img_height * (dataStructure.height + 1);
             // variablize 150 to change based on number of ppl in tree so everyone is spaced out properly
-            const tree_x = (2 ** (dataStructure.height + 1)) * 125;
+            const tree_x = (2 ** (dataStructure.height + 1)) * img_width;
             console.log("tree_y: " + tree_y);
             console.log("tree_x: " + tree_x);
 

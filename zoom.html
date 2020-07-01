@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script>
+        data = {
+            const randomX = d3.randomNormal(width / 2, 80);
+            const randomY = d3.randomNormal(height / 2, 80);
+            return Array.from({ length: 2000 }, () => [randomX(), randomY()]);
+        }
+
+        height = 600
+
+        chart = {
+            const context = DOM.context2d(width, height);
+            const r = 1.5;
+
+            d3.select(context.canvas).call(d3.zoom()
+                .scaleExtent([1, 8])
+                .on("zoom", () => zoomed(d3.event.transform)));
+
+            function zoomed(transform) {
+            context.save();
+            context.clearRect(0, 0, width, height);
+            context.translate(transform.x, transform.y);
+            context.scale(transform.k, transform.k);
+            context.beginPath();
+            for (const [x, y] of data) {
+                context.moveTo(x + r, y);
+                context.arc(x, y, r, 0, 2 * Math.PI);
+            }
+            context.fill();
+            context.restore();
+        }
+
+        zoomed(d3.zoomIdentity);
+
+        return context.canvas;
+            }</script>
+</head>
+
+</html>
