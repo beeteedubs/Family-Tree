@@ -15,10 +15,9 @@
 
             var img_height = 100;
             var img_width = 200;
-
             container = document.getElementsByClassName('container')[0]
             // creates a frame px to work in, all elements shifted ↓ & → 50 px
-            const svg = d3.select('container').append("svg")
+            const svg = d3.select(container).append("svg")
                 .attr("width", 2000).attr("height", 2000)
                 .append("g").attr("transform", "translate(50,50)");//can comment out ot show signif
 
@@ -117,60 +116,78 @@
                 .attr("y", function (d) { return d.y - (img_height / 2); })
                 .attr('height', img_height).attr('width', img_width)
                 .attr('class', 'image')
+                .attr("onclick", function (d) {
+                    if (d3.select('image').style('visibility', 'visible') === true) {
+                        d3.select('image').style('visibility', 'hidden');
+                    } else {
+                        d3.select('image').style('visibility', 'visible');
+                    }
+                })
+
                 // .attr("width", function (d) { return img_height; })
                 // .attr("height", function (d) { return img_width; })
                 .attr("href", function (d) {
                     var out = d.data.img;
                     return out;
+                })
 
+            // .on("mousedown", function (d) {
+            // d3.select("#details")
+            //     .style("visibility", "visible")
+            //     .html(function () {
+            //         if (d.data.spouse != undefined)
+            //             return "Spouse: " + d.data.spouse;
+            //         else
+            //             return "No Spouse";
+            //     });
+            // })
+            // .on("mouseup", function () {
+            //     d3.select("#details").style("visibility","hidden");
+            // });;
 
-                    var spouseRectangles = svg.append("g").selectAll("image")
-                        .data(information.descendants());
-                    spouseRectangles.enter().append("image")
-                        .attr("x", function (d) { return d.x + ((img_width + img_height) / 2); })
-                        .attr("y", function (d) { return d.y - (img_height / 2); })
-                        .attr('height', img_height).attr('width', img_width)
-                        .attr("href", function (d) {
-                            var out = d.data.spouse_img;
-                            return out;
-                        })
-                        .classed("hide", function (d) { // prevents spouse rect from appearing for ppl w/out spouses
-                            if (d.data.spouse == undefined)
-                                return true;
-                            else
-                                return false;
-                        });
+            var spouseRectangles = svg.append("g").selectAll("image")
+                .data(information.descendants());
+            spouseRectangles.enter().append("image")
+                .attr("x", function (d) { return d.x + ((img_width + img_height) / 2); })
+                .attr("y", function (d) { return d.y - (img_height / 2); })
+                .attr('height', img_height).attr('width', img_width)
+                .attr("href", function (d) {
+                    var out = d.data.spouse_img;
+                    return out;
+                })
+                .classed("hide", function (d) { // prevents spouse rect from appearing for ppl w/out spouses
+                    if (d.data.spouse == undefined)
+                        return true;
+                    else
+                        return false;
+                });
 
-                    // var pictures = svg.append("g").selectAll("img")
-                    //     .data(information.descendants());
-                    // pictures.enter().append("img")
-                    //     .img(function (d) { return d.data.img; });
+            // var pictures = svg.append("g").selectAll("img")
+            //     .data(information.descendants());
+            // pictures.enter().append("img")
+            //     .img(function (d) { return d.data.img; });
 
-                    // Names
-                    var names = svg.append("g").selectAll("text")
-                        .data(information.descendants());
-                    names.enter().append("text")
-                        .text(function (d) { return d.data.name; })
-                        .attr("x", function (d) { return d.x - (img_height / 2); })
-                        .attr("y", function (d) { return d.y; })
-                        .classed("bigger", true);
+            // Names
+            var names = svg.append("g").selectAll("text")
+                .data(information.descendants());
+            names.enter().append("text")
+                .text(function (d) { return d.data.name; })
+                .attr("x", function (d) { return d.x - (img_height / 2); })
+                .attr("y", function (d) { return d.y; })
+                .classed("bigger", true);
 
-                    var spouseNames = svg.append("g").selectAll("text")
-                        .data(information.descendants());
-                    spouseNames.enter().append("text")
-                        .text(function (d) { return d.data.spouse; })
-                        .attr("x", function (d) { return d.x + (img_width + (img_height / 2)); })
-                        .attr("y", function (d) { return d.y; })
-                        .classed("bigger", true);
+            var spouseNames = svg.append("g").selectAll("text")
+                .data(information.descendants());
+            spouseNames.enter().append("text")
+                .text(function (d) { return d.data.spouse; })
+                .attr("x", function (d) { return d.x + (img_width + (img_height / 2)); })
+                .attr("y", function (d) { return d.y; })
+                .classed("bigger", true);
 
 
         </script>
     </div>
 
 </body>
-
-
-<!-- fdfd -->
-
 
 </html>
