@@ -8,7 +8,6 @@
     <link rel='stylesheet' type='text/css' href=styles.css>
     </link>
 </head>
-
 <body>
     <div class='container'>
         <script>
@@ -17,7 +16,7 @@
             var img_width = 200;
             container = document.getElementsByClassName('container')[0]
             // creates a frame px to work in, all elements shifted ↓ & → 50 px
-            var svg = d3.select(container).append("svg")
+            const svg = d3.select(container).append("svg")
                 .attr("width", 2000).attr("height", 2000)
                 .append("g").attr("transform", "translate(50,50)");//can comment out ot show signif
 
@@ -32,7 +31,8 @@
                 //{ "name": "Shirley", "parent": "", "spouse": "Steve", "Generation": 1 },
                 { "name": "Ingrid", "parent": "Alex", "Generation": 3, "img": "data/Grandma.jpg", },
                 { "name": "Sasha", "parent": "Alex", "Generation": 3, "img": "data/Grandpa.jpg", },
-                { "name": "Suzie Q", "parent": "Jocelyn", "Generation": 3, "img": "data/Grandma.jpg", }
+                { "name": "Suzie Q", "parent": "Jocelyn", "Generation": 3, "img": "data/Grandma.jpg", },
+                
             ];
 
             // Molds the data,
@@ -42,15 +42,26 @@
             console.log(dataStructure);
 
 
-            const tree_y = 125 * (dataStructure.height + 1);
+            const tree_y = img_height * (dataStructure.height + 1);
             // variablize 150 to change based on number of ppl in tree so everyone is spaced out properly
-            const tree_x = (2 ** (dataStructure.height + 1)) * 125;
+            const tree_x = (2 ** (dataStructure.height + 1)) * img_width;
             console.log("tree_y: " + tree_y);
             console.log("tree_x: " + tree_x);
 
             // painting size, careful don't go too far, should not be bigger tha canvas size or svg size
             var treeStructure = d3.tree().size([tree_x, tree_y]);
 
+            svg.call(d3.zoom()
+                //.extent([[0,0],[width, height]])
+                .scaleExtent([1,8])
+                .on("zoom",zoomed));
+
+            function zoomed() {
+                svg.attr("transform", d3.event.transform);
+            }
+            //return svg.node();
+            //console.log(zoom);
+           
             //??? doesn't seem necessary according to prints of descendants and links
             // But if we dont use it, the code doent work
             var information = treeStructure(dataStructure);
@@ -163,6 +174,8 @@
                 .attr("x", function (d) { return d.x + (img_width + (img_height / 2)); })
                 .attr("y", function (d) { return d.y; })
                 .classed("bigger", true);
+
+              
         </script>
     </div>
 

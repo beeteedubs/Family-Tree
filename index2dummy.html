@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<!-- 
+
+
+
+
+
+
+
+    NEW CHANGES
+ -->
+<!-- Based on Crypters Infotech Video  -->
+<html>
+
+<head>
+    <h1>Family Tree Crypters InfoTech</h1>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <!-- <script> margin = ({ top: 10, right: 120, bottom: 10, left: 40 })</script> -->
+    <!-- try to create global variables for the hight and width of the images/boxes-->
+    <style>
+        image {
+            fill: white;
+            stroke: silver;
+            width: 80px;
+            height: 40px;
+            stroke-width: 3px;
+            visibility: hidden;
+        }
+
+        path {
+            fill: none;
+            stroke: silver;
+            stroke-width: 3px;
+        }
+
+        text {
+            dominant-baseline: middle;
+            text-anchor: middle;
+        }
+
+        .bigger {
+            font-size: 20px;
+        }
+
+        .hide {
+            visibility: hidden;
+        }
+        #details{
+            visibility: hidden;
+            position: absolute;
+            left:320px;
+            width:200px;
+            height:30px;
+            background: gray;
+            color:white;
+            border-radius: 15px;
+            text-align: center;
+            padding:15px;
+            font-size:20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="details"></div>
+    <div id ="rect"></div>
+    <script>
+        /* PSEUDOCODE
+        
+        Create framework boundaries (i.e. svg and tree boundaries like canvas and painting)
+        Load data
+        Create text
+        Create boxes
+        Create paths
+        
+        */
+        const img_width = 500;
+        const img_height = 200;
+        d3.select("rect").style("visibility","visible")
+            .style("width", img_width + "px")
+            .style("height", img_height + "px");
+         console.log(d3.select("rect"));
+
+        // creates a frame 600x600 px to work in, all elements shifted ↓ & → 50 px
+        var svg = d3.select("body").append("svg")
+            .attr("width", 2000).attr("height", 2000)
+            .append("g").attr("transform", "translate(50,50)");//can comment out ot show signif
+
+        // self-explanatory
+        var familytree_Steve = [
+            {
+                "name": "Steve", "parent": "", "spouse": "Shirley", "Generation": 1, "img": "data/Grandpa.jpg", "spouse_img": "data/Grandma.jpg"
+            },
+            { "name": "Alex", "parent": "Steve", "spouse": "Alexis", "Generation": 2, "img": "data/Grandpa.jpg", "spouse_img": "data/Grandma.jpg" },
+            { "name": "Jocelyn", "parent": "Steve", "spouse": "Johnny", "Generation": 3, "img": "data/Grandma.jpg", "spouse_img": "data/Grandma.jpg" },
+            //{ "name": "Johnny", "parent": "", "spouse": "Jocelyn", "Generation": 2 },
+            //{ "name": "Johnny", "parent": "", "spouse": "Jocelyn", "Generation": 2 },
+            //{ "name": "Alexis", "parent": "Alexandra", "spouse": "Alex", "Generation": 2 },
+            //{ "name": "Shirley", "parent": "", "spouse": "Steve", "Generation": 1 },
+<<<<<<< HEAD
+            { "name": "Ingrid", "parent": "Alex", "Generation": 3 },
+            { "name": "Sasha", "parent": "Alex", "Generation": 3 },
+            { "name": "Suzie Qu", "parent": "Jocelyn", "Generation": 3 }
+=======
+            { "name": "Ingrid", "parent": "Alex", "Generation": 3, "img": "data/Grandma.jpg", },
+            { "name": "Sasha", "parent": "Alex", "Generation": 3, "img": "data/Grandpa.jpg", },
+            { "name": "Suzie Q", "parent": "Jocelyn", "Generation": 3, "img": "data/Grandma.jpg", }
+>>>>>>> master
+        ];
+
+        // Molds the data,
+        var dataStructure = d3.stratify()
+            .id(function (d) { return d.name; }) //the name in "d.name" needs to match data
+            .parentId(function (d) { return d.parent; })(familytree_Steve);
+        // const tree_x = (2 ^ (information.descendants().height + 1))*50
+        console.log(dataStructure);
+        const tree_y = 100 * (dataStructure.height + 1);
+        const tree_x = (2 ** (dataStructure.height + 1)) * 100;
+        console.log("tree_y: " + tree_y);
+        console.log("tree_x: " + tree_x);
+
+        var treeStructure = d3.tree().size([tree_x, tree_y]);
+
+        var information = treeStructure(dataStructure); //??? doesn't seem necessary according to prints of descendants and links
+        // But if we dont use it, the code doent work
+
+        console.log(information.descendants());
+        console.log(information.links());
+        // looking at log info:
+        // height: how many layers of descedants r directly below this node
+        // depth: how many above, opposite to height
+
+        // Path drawing stuff??? why 20 -> variablize later with once we decide dimensions of buttons
+        var connections = svg.append("g").selectAll("path")
+            .data(information.links());
+        connections.enter().append("path")
+            .attr("d", function (d) {
+                // start pt, control pt, 2nd control pt, end pt for curved path
+                return "M" + (d.source.x + 40) + "," + (d.source.y) +
+                    " v 40 " +
+                    "H" + (d.target.x - 20) +
+                    " V" + d.target.y;
+
+                //"C" + d.source.x
+                //     + "," + (d.source.y + d.target.y) / 2 + " "
+                //     + d.target.x + "," + (d.source.y + d.target.y) / 2 + " "
+                //     + d.target.x + "," + d.target.y;
+            });
+
+        var spouseConnections = svg.append("g").selectAll("path")
+            .data(information.links());
+        connections.enter().append("path")
+            .attr("d", function (d) {
+                return "M" + (d.source.x) + ',' + (d.source.y) +
+                    "v 0" +
+                    "h 80";
+
+            })
+
+
+
+        // Creates the boxes to represent nodes
+
+        var rectangles = svg.append("g").selectAll("image")
+            .data(information.descendants());
+        rectangles.enter().append("image")
+            .attr("x", function (d) { return d.x - 60; }) //how not hardcode 40 and 20? make variables gloablly in non-script tags?
+            .attr("y", function (d) { return d.y - 20; })
+<<<<<<< HEAD
+        .on("mousedown", function (d) {
+            d3.select("#details")
+                .style("visibility", "visible")
+                .html(function () {
+                    if (d.data.spouse != undefined)
+                        return "Spouse: " + d.data.spouse;
+                    else
+                        return "No Spouse";
+                });
+        })
+        .on("mouseup", function () {
+            d3.select("#details").style("visibility","hidden");
+        });
+=======
+            .attr("width", function (d) { return 80; })
+            .attr("height", function (d) { return 40; })
+            .attr("href", function (d) {
+                var out = d.data.img;
+                return out;
+            })
+            
+            .on("mousedown", function (d) {
+                d3.select("#details")
+                    .style("visibility", "visible")
+                    .html(function () {
+                        if (d.data.spouse != undefined)
+                            return "Spouse: " + d.data.spouse;
+                        else
+                            return "No Spouse";
+                    });
+            })
+        // .on("mousedown", function (d) {
+        // d3.select("#details")
+        //     .style("visibility", "visible")
+        //     .html(function () {
+        //         if (d.data.spouse != undefined)
+        //             return "Spouse: " + d.data.spouse;
+        //         else
+        //             return "No Spouse";
+        //     });
+        // })
+        // .on("mouseup", function () {
+        //     d3.select("#details").style("visibility","hidden");
+        // });;
+>>>>>>> master
+
+        var spouseRectangles = svg.append("g").selectAll("rect")
+            .data(information.descendants());
+        spouseRectangles.enter().append("rect")
+            .attr("x", function (d) { return d.x + 60; })
+            .attr("y", function (d) { return d.y - 20; })
+            .classed("hide", function (d) {
+                if (d.data.spouse == undefined)
+                    return true;
+                else
+                    return false;
+            });
+
+        // var pictures = svg.append("g").selectAll("img")
+        //     .data(information.descendants());
+        // pictures.enter().append("img")
+        //     .img(function (d) { return d.data.img; });
+
+        var names = svg.append("g").selectAll("text")
+            .data(information.descendants());
+        names.enter().append("text")
+            .text(function (d) { return d.data.name; })
+            .attr("x", function (d) { return d.x - 20; })
+            .attr("y", function (d) { return d.y; })
+            .classed("bigger", true);
+
+        var spouseNames = svg.append("g").selectAll("text")
+            .data(information.descendants());
+        spouseNames.enter().append("text")
+            .text(function (d) { return d.data.spouse; })
+            .attr("x", function (d) { return d.x + 100; })
+            .attr("y", function (d) { return d.y; })
+            .classed("bigger", true);
+    </script>
+</body>
+
+</html>
