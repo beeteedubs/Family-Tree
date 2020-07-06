@@ -9,11 +9,31 @@ text {
   color: rgb(221, 36, 36); /*no diff*/
   font-family: serif;
 }
-
+/* 
 .container {
   margin: auto;
   width: 90%;
   border: 5px red solid;
+} */
+image.btn {
+  stroke: gray;
+  fill: #fff;
+  fill-opacity: 0;
+  stroke-opacity: 0;
+}
+#details {
+  position: absolute;
+  left: 320px;
+  top: 120px;
+  width: 200px;
+  height: 30px;
+  background: gray;
+  color: white;
+  border-radius: 15px;
+  text-align: center;
+  padding: 15px;
+  visibility: hidden;
+  font-size: 20px;
 }
 
 /* Above this line means does something noticeable */
