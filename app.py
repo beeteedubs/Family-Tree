@@ -14,7 +14,7 @@ class Todo(db.Model):
     id = db.Column(
         db.Integer, primary_key=True
     )  # integer that reference sthe id of each entry
-    content = db.Column(db.String(200), nullable=False)
+    content = db.Column(db.String(225), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
@@ -38,10 +38,10 @@ def index():
         except:
             return "there was na issue adding your task"
     else:
-        # tasks = Todo.query.order_by(Todo.date_created).all()
-        return render_template("extension.html")
+        tasks = Todo.query.order_by(Todo.date_created).all()
+        return render_template("extension.html", tasks=tasks)
 
 
-# unnecessary 
+# unnecessary
 # if __name__ == "__main__":
 #     app.run(debug=True)
