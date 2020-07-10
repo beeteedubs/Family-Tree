@@ -1,4 +1,63 @@
-body, html {
+Skip
+  to
+  content
+  Search
+  or
+  jump
+  to…
+  Pull
+  requests
+  Issues
+  Marketplace
+  Explore
+  @beeteedubs
+  Learn
+  Git
+  and
+  GitHub
+  without
+  any
+  code!
+  Using
+  the
+  Hello
+  World
+  guide,
+you’ll start a branch,
+write comments,
+and
+  open
+  a
+  pull
+  request.
+  jakerieger
+  /
+  FlaskIntroduction
+  14
+  114108
+  Code
+  Issues
+  Pull
+  requests
+  2
+  Actions
+  Projects
+  Wiki
+  Security
+  Insights
+  FlaskIntroduction/static/css/main.css
+  @jakerieger
+  jakerieger
+  initial
+  commit
+  Latest
+  commit
+  2141f98
+  on
+  May
+  25,
+2019 History 1 contributor 35 lines (28 sloc) 355 Bytes body,
+html {
   margin: 0;
   font-family: sans-serif;
 }
@@ -8,7 +67,9 @@ body, html {
   width: 400px;
 }
 
-table, td, th {
+table,
+td,
+th {
   border: 1px solid #aaa;
 }
 
@@ -30,4 +91,6 @@ td {
   margin-top: 20px;
 }
 
-#conten
+#content {
+  width: 70%;
+}
