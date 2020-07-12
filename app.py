@@ -9,17 +9,18 @@ db = SQLAlchemy(app)
 
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String(200), nullable=False)
+    content = db.Column(db.String(1), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
         return "<Task %r>" % self.id
 
 
+# routes rendering to url: '/' aka localhost:5000 by default or 127.0.0.1:5000/
 @app.route("/", methods=["POST", "GET"])
 def index():
     if request.method == "POST":
-        task_content = request.form["content"]
+        task_content = request.form["content1"]  # refers to name, not id
         new_task = Todo(content=task_content)
 
         try:
