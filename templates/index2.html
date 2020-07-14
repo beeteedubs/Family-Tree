@@ -1,15 +1,6 @@
 {% extends 'base2.html' %}
 
 {% block javascript %}
-<script>
-    var data = [
-        {% for entry in entries %}
-    { name: "{{ entry.name }}", parent: "{{ entry.parent }}", spouse: "{{ entry.spouse }}" },
-    {% endfor %}
-    { name: "blank", parent: "Dad", spouse: "" }
-
-        ];
-</script>
 {% endblock %}
 
 {% block head %}
@@ -17,6 +8,7 @@
 {% endblock %}
 
 {% block body %}
+<a href='/display'>To Tree</a>
 <div id=details>
     <h1 style="text-align: center">Fam Tree Data</h1>
 

@@ -1,0 +1,22 @@
+{% extends 'base2.html' %}
+
+{% block javascript %}
+<script>
+    var data = [
+        {% for entry in entries %}
+    { name: "{{ entry.name }}", parent: "{{ entry.parent }}", spouse: "{{ entry.spouse }}" },
+    {% endfor %}
+    { name: "blank", parent: "Dad", spouse: "" }
+
+        ];
+</script>
+{% endblock %}
+
+{% block head %}
+<title>Family Tree</title>
+{% endblock %}
+
+{% block body %}
+<a href='/'>Back to Table</a>
+<script src='../static/js/script.js'></script>
+{% endblock %}

@@ -28,6 +28,10 @@ class family_input(db.Model):
 
 #     def __repr__(self):
 #         return "<Datbase_Entry %r>" % self.id
+@app.route("/display")
+def render_tree():
+    entries = family_input.query.order_by(family_input.id).all()
+    return render_template("tree.html", entries=entries)
 
 
 @app.route("/", methods=["POST", "GET"])
