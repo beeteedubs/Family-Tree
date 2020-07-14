@@ -57,7 +57,7 @@ var dataStructure = d3
   }) //the name in "d.name" needs to match data
   .parentId(function (d) {
     return d.parent;
-  })(familytree_Steve);
+  })(data);
 console.log(dataStructure);
 
 const tree_y = img_height * (dataStructure.height + 1);

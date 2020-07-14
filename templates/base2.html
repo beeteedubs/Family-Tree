@@ -7,14 +7,18 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main2.css') }}">
     </link>
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'js/script2.js) }}">
-    </link>
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='js/script.js') }}">
+    </link> -->
+
     <script src="https://d3js.org/d3.v5.min.js"></script>
 
+    {% block javascript %}{% endblock %}
     {% block head %}{% endblock %}
 </head>
 
 <body>
+    <script src='../static/js/script.js'></script>
+
     {% block body %}{% endblock %}
 </body>
 

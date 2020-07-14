@@ -20,7 +20,7 @@ class Todo(db.Model):
 @app.route("/", methods=["POST", "GET"])
 def index():
     if request.method == "POST":
-        task_content = request.form["content1"]  # refers to name, not id
+        task_content = request.form["content"]  # refers to name, not id
         new_task = Todo(content=task_content)
 
         try:
@@ -52,7 +52,7 @@ def update(id):
     task = Todo.query.get_or_404(id)
 
     if request.method == "POST":
-        task.content = request.form["content"]
+        task.content = request.form["content1"]
 
         try:
             db.session.commit()
