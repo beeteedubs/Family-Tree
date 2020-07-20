@@ -1,53 +1,5 @@
-var img_height = 100;
-var img_width = 200;
-// creates a frame, anything past is cutt off, all elements shifted ↓ & → 50 px
-const svg = d3
-  .select("body")
-  .append("svg")
-  .attr("width", 2000)
-  .attr("height", 2000)
-  .append("g")
-  .attr("transform", "translate(50,50)"); //can comment out ot show signif
-
-// self-explanatory data
-var familytree_Steve = [
-  {
-    name: "Steve",
-    parent: "",
-    spouse: "Shirley",
-    Generation: 1,
-    img: "data/Grandpa.jpg",
-    spouse_img: "data/Grandma.jpg",
-  },
-  {
-    name: "Alex",
-    parent: "Steve",
-    spouse: "Alexis",
-    Generation: 2,
-    img: "data/Grandpa.jpg",
-    spouse_img: "data/Grandma.jpg",
-  },
-  {
-    name: "Jocelyn",
-    parent: "Steve",
-    spouse: "Johnny",
-    Generation: 3,
-    img: "data/Grandma.jpg",
-    spouse_img: "data/Grandpa.jpg",
-  },
-  //{ "name": "Johnny", "parent": "", "spouse": "Jocelyn", "Generation": 2 },
-  //{ "name": "Johnny", "parent": "", "spouse": "Jocelyn", "Generation": 2 },
-  //{ "name": "Alexis", "parent": "Alexandra", "spouse": "Alex", "Generation": 2 },
-  //{ "name": "Shirley", "parent": "", "spouse": "Steve", "Generation": 1 },
-  { name: "Ingrid", parent: "Alex", Generation: 3, img: "data/Grandma.jpg" },
-  { name: "Sasha", parent: "Alex", Generation: 3, img: "data/Grandpa.jpg" },
-  {
-    name: "Suzie Q",
-    parent: "Jocelyn",
-    Generation: 3,
-    img: "data/Grandma.jpg",
-  },
-];
+const img_height = 100;
+const img_width = 200;
 
 // stratifies data, provides x and y coord
 var dataStructure = d3
@@ -62,7 +14,17 @@ console.log(dataStructure);
 
 const tree_y = img_height * (dataStructure.height + 1);
 // variablize 150 to change based on number of ppl in tree so everyone is spaced out properly
-const tree_x = 2 ** (dataStructure.height + 0.5) * img_width;
+const tree_x = 1.6 ** (dataStructure.height + 1) * img_width;
+
+// creates a frame, anything past is cutt off, all elements shifted ↓ & → 50 px
+const svg = d3
+  .select("body")
+  .append("svg")
+  .attr("width", tree_x)
+  .attr("height", 2 * tree_y)
+  .append("g")
+  .attr("transform", "translate(50,50)"); //can comment out ot show signif
+
 console.log("tree_y: " + tree_y);
 console.log("tree_x: " + tree_x);
 
@@ -100,12 +62,15 @@ var connections = svg.append("g").selectAll("path").data(information.links());
 connections
   .enter()
   .append("path")
+  .attr("fill", "none")
+  .attr("stroke", "#555")
+  .attr("stroke-opacity", 0.4)
   .attr("d", function (d) {
     // start pt, control pt, 2nd control pt, end pt for curved path
     // CHANGE: d.source.x + wat t obe
     return (
       "M" +
-      (d.source.x + img_height) +
+      (d.source.x + img_width / 2) +
       "," +
       d.source.y +
       " v  " +
@@ -116,10 +81,18 @@ connections
       d.target.y
     );
 
-    //"C" + d.source.x
-    //     + "," + (d.source.y + d.target.y) / 2 + " "
-    //     + d.target.x + "," + (d.source.y + d.target.y) / 2 + " "
-    //     + d.target.x + "," + d.target.y;
+    "C" +
+      d.source.x +
+      "," +
+      (d.source.y + d.target.y) / 2 +
+      " " +
+      d.target.x +
+      "," +
+      (d.source.y + d.target.y) / 2 +
+      " " +
+      d.target.x +
+      "," +
+      d.target.y;
   });
 
 var spouseConnections = svg

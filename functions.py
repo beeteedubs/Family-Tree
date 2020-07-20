@@ -5,6 +5,9 @@ from datetime import datetime
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///family_tree.db"
 db = SQLAlchemy(app)
+# # app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://%s:@localhost/family_output" % (
+#     pw
+# )
 
 
 class family_input(db.Model):
