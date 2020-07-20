@@ -10,10 +10,11 @@ var dataStructure = d3
   .parentId(function (d) {
     return d.parent;
   })(data);
+
+console.log("dataStructure: ");
 console.log(dataStructure);
 
 const tree_y = img_height * (dataStructure.height + 1);
-// variablize 150 to change based on number of ppl in tree so everyone is spaced out properly
 const tree_x = 1.6 ** (dataStructure.height + 1) * img_width;
 
 // creates a frame, anything past is cutt off, all elements shifted ↓ & → 50 px
@@ -23,7 +24,7 @@ const svg = d3
   .attr("width", tree_x)
   .attr("height", 2 * tree_y)
   .append("g")
-  .attr("transform", "translate(50,50)"); //can comment out ot show signif
+  .attr("transform", "translate(50,50)");
 
 console.log("tree_y: " + tree_y);
 console.log("tree_x: " + tree_x);
@@ -50,8 +51,16 @@ function zoomed() {
 var information = treeStructure(dataStructure);
 
 // console.log(treeStructure)
+console.log("information.descendants():");
 console.log(information.descendants());
+console.log("information.links():");
 console.log(information.links());
+console.log("---------------");
+var i;
+var depths;
+for (i = 0; i < information.descendants().length; i++) {
+  console.log(information.descendants()[i].depth);
+}
 // looking at log info:
 // height: how many layers of descedants r directly below this node
 // depth: how many above, opposite to height
@@ -67,32 +76,31 @@ connections
   .attr("stroke-opacity", 0.4)
   .attr("d", function (d) {
     // start pt, control pt, 2nd control pt, end pt for curved path
-    // CHANGE: d.source.x + wat t obe
     return (
-      "M" +
+      "M " +
       (d.source.x + img_width / 2) +
       "," +
       d.source.y +
-      " v  " +
+      " v " +
       (img_height - 10) +
-      "H" +
+      " H " +
       (d.target.x - img_height / 2) +
       " V" +
       d.target.y
     );
 
-    "C" +
-      d.source.x +
-      "," +
-      (d.source.y + d.target.y) / 2 +
-      " " +
-      d.target.x +
-      "," +
-      (d.source.y + d.target.y) / 2 +
-      " " +
-      d.target.x +
-      "," +
-      d.target.y;
+    // "C" +
+    //   d.source.x +
+    //   "," +
+    //   (d.source.y + d.target.y) / 2 +
+    //   " " +
+    //   d.target.x +
+    //   "," +
+    //   (d.source.y + d.target.y) / 2 +
+    //   " " +
+    //   d.target.x +
+    //   "," +
+    //   d.target.y;
   });
 
 var spouseConnections = svg
@@ -110,11 +118,12 @@ connections
 
 var rectangles = svg
   .append("g")
-  .selectAll("image")
+  .selectAll("rect")
   .data(information.descendants());
+
 rectangles
   .enter()
-  .append("image")
+  .append("rect")
   .attr("x", function (d) {
     return d.x - (img_width + img_height) / 2;
   }) //how not hardcode 40 and 20? make variables gloablly in non-script tags?
@@ -123,20 +132,8 @@ rectangles
   })
   .attr("height", img_height)
   .attr("width", img_width)
-  .attr("class", "btn")
-  .attr("onclick", "console.log('hi')")
-  .on("mousedown", function (d) {
-    d3.select("#details")
-      .style("visibility", "visible")
-      .html(function () {
-        if (d.data.spouse != undefined) return "Spouse: " + d.data.spouse;
-        else return "No Spouse";
-      });
-  })
-  .attr("href", function (d) {
-    var out = d.data.img;
-    return out;
-  });
+  .attr("class", "image");
+// .attr("onclick", "console.log('hi')")
 // .attr("onclick", function (d) {
 //     if (d3.select('image').style('visibility', 'visible') === true) {
 //         d3.select('image').style('visibility', 'hidden');
@@ -167,10 +164,6 @@ spouseRectangles
   })
   .attr("height", img_height)
   .attr("width", img_width)
-  .attr("href", function (d) {
-    var out = d.data.spouse_img;
-    return out;
-  })
   .classed("hide", function (d) {
     // prevents spouse rect from appearing for ppl w/out spouses
     if (d.data.spouse == undefined) return true;

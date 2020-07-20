@@ -4,9 +4,9 @@
 <script>
     var data = [
         {% for entry in entries %}
-    { name: "{{ entry.name }}", parent: "{{ entry.parent }}", spouse: "{{ entry.spouse }}" },
+    { name: "{{ entry.name }}", parent: "{{ entry.parent }}", spouse: "{{ entry.spouse }}", img: "Grandma.png" },
     {% endfor %}
-    { name: "blank", parent: "Dad", spouse: "" }
+    { name: "blank", parent: "Dad", spouse: "", img: "Grandma.png" }
 
         ];
 </script>
