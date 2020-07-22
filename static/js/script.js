@@ -36,7 +36,7 @@ svg.call(
   d3
     .zoom()
     //.extent([[0,0],[width, height]])
-    .scaleExtent([1, 8])
+    .scaleExtent([1, 9])
     .on("zoom", zoomed)
 );
 
