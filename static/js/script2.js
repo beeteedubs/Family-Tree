@@ -15,7 +15,7 @@ console.log("dataStructure: ");
 console.log(dataStructure);
 
 const tree_y = img_height * (dataStructure.height + 1);
-const tree_x = 1.6 ** (dataStructure.height + 1) * img_width;
+const tree_x = 2 ** (dataStructure.height + 1) * img_width;
 
 // creates a frame, anything past is cutt off, all elements shifted ↓ & → 50 px
 const svg = d3
@@ -24,7 +24,7 @@ const svg = d3
   .attr("width", tree_x)
   .attr("height", 2 * tree_y)
   .append("g")
-  .attr("transform", "translate(50,50)");
+  .attr("transform", "translate(100,100)");
 
 console.log("tree_y: " + tree_y);
 console.log("tree_x: " + tree_x);
@@ -36,7 +36,7 @@ svg.call(
   d3
     .zoom()
     //.extent([[0,0],[width, height]])
-    .scaleExtent([1, 9])
+    .scaleExtent([1, 8])
     .on("zoom", zoomed)
 );
 
@@ -78,15 +78,27 @@ connections
     // start pt, control pt, 2nd control pt, end pt for curved path
     return (
       "M " +
-      (d.source.x + img_width / 2) +
+      d.source.x +
       "," +
       d.source.y +
       " v " +
       (img_height - 10) +
       " H " +
-      (d.target.x - img_height / 2) +
+      d.target.x + //- img_height / 2 +
       " V" +
       d.target.y
+
+      // For with spouse original code:
+      // "M " +
+      // (d.source.x + img_width / 2) +
+      // "," +
+      // d.source.y +
+      // " v " +
+      // (img_height - 10) +
+      // " H " +
+      // (d.target.x - img_height / 2) +
+      // " V" +
+      // d.target.y
     );
 
     // "C" +
@@ -103,36 +115,24 @@ connections
     //   d.target.y;
   });
 
-var spouseConnections = svg
-  .append("g")
-  .selectAll("path")
-  .data(information.links());
-connections
-  .enter()
-  .append("path")
-  .attr("d", function (d) {
-    return "M" + d.source.x + "," + d.source.y + "v 0" + "h " + img_height * 2;
-  });
-
-// Creates the boxes to represent nodes
-
 var rectangles = svg
   .append("g")
   .selectAll("rect")
   .data(information.descendants());
-
 rectangles
   .enter()
   .append("rect")
+  .attr("fill", "none")
+  .attr("stroke", "silver")
   .attr("x", function (d) {
-    return d.x - (img_width + img_height) / 2;
-  }) //how not hardcode 40 and 20? make variables gloablly in non-script tags?
+    return d.x - img_width / 2;
+  })
   .attr("y", function (d) {
     return d.y - img_height / 2;
   })
   .attr("height", img_height)
   .attr("width", img_width)
-  .attr("class", "image");
+  .attr("class", "rect");
 // .attr("onclick", "console.log('hi')")
 // .attr("onclick", function (d) {
 //     if (d3.select('image').style('visibility', 'visible') === true) {
@@ -149,32 +149,6 @@ rectangles
 //     d3.select("#details").style("visibility","hidden");
 // });;
 
-var spouseRectangles = svg
-  .append("g")
-  .selectAll("image")
-  .data(information.descendants());
-spouseRectangles
-  .enter()
-  .append("image")
-  .attr("x", function (d) {
-    return d.x + (img_width + img_height) / 2;
-  })
-  .attr("y", function (d) {
-    return d.y - img_height / 2;
-  })
-  .attr("height", img_height)
-  .attr("width", img_width)
-  .classed("hide", function (d) {
-    // prevents spouse rect from appearing for ppl w/out spouses
-    if (d.data.spouse == undefined) return true;
-    else return false;
-  });
-
-// var pictures = svg.append("g").selectAll("img")
-//     .data(information.descendants());
-// pictures.enter().append("img")
-//     .img(function (d) { return d.data.img; });
-
 // Names
 var names = svg.append("g").selectAll("text").data(information.descendants());
 names
@@ -184,27 +158,66 @@ names
     return d.data.name;
   })
   .attr("x", function (d) {
-    return d.x - img_height / 2;
+    return d.x;
   })
   .attr("y", function (d) {
     return d.y;
   })
   .classed("bigger", true);
 
-var spouseNames = svg
-  .append("g")
-  .selectAll("text")
-  .data(information.descendants());
-spouseNames
-  .enter()
-  .append("text")
-  .text(function (d) {
-    return d.data.spouse;
-  })
-  .attr("x", function (d) {
-    return d.x + (img_width + img_height / 2);
-  })
-  .attr("y", function (d) {
-    return d.y;
-  })
-  .classed("bigger", true);
+//   var spouseConnections = svg
+//   .append("g")
+//   .selectAll("path")
+//   .data(information.links());
+// connections
+//   .enter()
+//   .append("path")
+//   .attr("d", function (d) {
+//     return "M" + d.source.x + "," + d.source.y + "v 0" + "h " + img_height * 2;
+//   });
+
+// // Creates the boxes to represent nodes
+
+// var spouseRectangles = svg
+//   .append("g")
+//   .selectAll("image")
+//   .data(information.descendants());
+// spouseRectangles
+//   .enter()
+//   .append("image")
+//   .attr("x", function (d) {
+//     return d.x + (img_width + img_height) / 2;
+//   })
+//   .attr("y", function (d) {
+//     return d.y - img_height / 2;
+//   })
+//   .attr("height", img_height)
+//   .attr("width", img_width)
+//   .classed("hide", function (d) {
+//     // prevents spouse rect from appearing for ppl w/out spouses
+//     if (d.data.spouse == undefined) return true;
+//     else return false;
+//   });
+
+// // var pictures = svg.append("g").selectAll("img")
+// //     .data(information.descendants());
+// // pictures.enter().append("img")
+// //     .img(function (d) { return d.data.img; });
+
+// var spouseNames = svg
+//   .append("g")
+//   .selectAll("text")
+//   .data(information.descendants());
+// spouseNames
+//   .enter()
+//   .append("text")
+//   .text(function (d) {
+//     return d.data.spouse;
+//   })
+//   .attr("x", function (d) {
+//     return d.x + (img_width + img_height / 2);
+//   })
+//   .attr("y", function (d) {
+//     return d.y;
+//   })
+//   .classed("bigger", true);

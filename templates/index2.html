@@ -1,3 +1,5 @@
+<!-- Contains the form for databse input and chart taht displays databse info -->
+
 {% extends 'base2.html' %}
 
 {% block javascript %}
@@ -193,11 +195,12 @@
         <input type="text" name='Your Name' placeholder="Your Name" id=name>
         <input type="text" name="Father's Name" placeholder="Father's Name" id=parent>
         <!-- <input type="text" name="Mother's Name" placeholder="Mother's Name" id=parent> -->
-        <input type="text" name="Spouse's Name" placeholder="Spouse's Name" id=spouse>
+        <!-- <input type="text" name="Spouse's Name" placeholder="Spouse's Name" id=spouse> -->
         <select name="Any Children?" placeholder="Any children?">
             <option disabled selected value="">Any children?</option>
-            <option value="True">Yes, I have children</option>
+            <option selected='selected' value="True">Yes, I have children</option>
             <option value="False">No, I have no children</option>
+
         </select>
         <input type='submit' name='Add Task'>
     </form>
@@ -211,7 +214,7 @@
             <th>ID</th>
             <th> Your Name</th>
             <th> Your Father's Name</th>
-            <th> Your Spouse's Name (if you got one)</th>
+            <!-- <th> Your Spouse's Name (if you got one)</th> -->
             <th> Any Children?</th>
             <th> Actions</th>
         </tr>
@@ -220,7 +223,7 @@
             <td>{{ entry.id }}</td>
             <td>{{ entry.name }}</td>
             <td>{{ entry.parent }}</td>
-            <td>{{ entry.spouse }}</td>
+            <!-- <td>{{ entry.spouse }}</td> -->
             <td>{{ entry.have_children }}</td>
             <td>
                 <a href="/delete/{{entry.id}}">Delete</a>

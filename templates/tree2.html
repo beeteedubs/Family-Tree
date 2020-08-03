@@ -1,3 +1,5 @@
+<!-- Transfers info from database to javascript for use in family tree -->
+
 {% extends 'base2.html' %}
 
 {% block javascript %}
@@ -6,7 +8,7 @@
         {% for entry in entries %}
     { name: "{{ entry.name }}", parent: "{{ entry.parent }}", spouse: "{{ entry.spouse }}", img: "Grandma.png" },
     {% endfor %}
-    { name: "blank", parent: "Dad", spouse: "", img: "Grandma.png" }
+    { name: "Bye", parent: "", spouse: "", img: "Grandma.png" }
 
         ];
 </script>
@@ -18,5 +20,5 @@
 
 {% block body %}
 <a href='/'>Back to Table</a>
-<script src='../static/js/script.js'></script>
+<script src='../static/js/script2.js'></script>
 {% endblock %}

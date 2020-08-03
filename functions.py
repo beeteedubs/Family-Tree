@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///family_tree.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///dads_only_tree.db"
 db = SQLAlchemy(app)
 # # app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://%s:@localhost/family_output" % (
 #     pw
@@ -14,7 +14,7 @@ class family_input(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(225), nullable=False, default="Sasha")
     parent = db.Column(db.String(225), nullable=False, default="Sasha")
-    spouse = db.Column(db.String(225), nullable=True, default="")
+    # spouse = db.Column(db.String(225), nullable=True, default="")
     have_children = db.Column(db.String(225), nullable=False)
 
     def __repr__(self):
@@ -34,7 +34,7 @@ class family_input(db.Model):
 @app.route("/display")
 def render_tree():
     entries = family_input.query.order_by(family_input.id).all()
-    return render_template("tree.html", entries=entries)
+    return render_template("tree2.html", entries=entries)
 
 
 @app.route("/", methods=["POST", "GET"])
@@ -42,14 +42,9 @@ def index():
     if request.method == "POST":
         name = request.form.get("Your Name")
         father = request.form.get("Father's Name")
-        spouse = request.form.get("Spouse's Name")
+        # spouse = request.form.get("Spouse's Name")
         children = request.form.get("Any Children?")
-        # entry = database(
-        #     name=name, parent=father, spouse=spouse, have_children=children
-        # )
-        entry = family_input(
-            name=name, parent=father, spouse=spouse, have_children=children
-        )
+        entry = family_input(name=name, parent=father, have_children=children)
 
         try:
             db.session.add(entry)
@@ -81,7 +76,7 @@ def update(id):
     if request.method == "POST":
         entry.name = request.form["Your Name"]
         entry.parent = request.form["Father's Name"]
-        entry.spouse = request.form["Spouse's Name"]
+        # entry.spouse = request.form["Spouse's Name"]
         entry.have_children = request.form["Any Children?"]
 
         try:
@@ -91,7 +86,7 @@ def update(id):
             return "There was an issue updating your task"
 
     else:
-        return render_template("update.html", entry=entry)
+        return render_template("update2.html", entry=entry)
 
 
 if __name__ == "__main__":
