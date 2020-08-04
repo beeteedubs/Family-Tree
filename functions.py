@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///dads_only_tree.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///family_tree.db"
 db = SQLAlchemy(app)
 # # app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://%s:@localhost/family_output" % (
 #     pw
@@ -31,6 +31,8 @@ class family_input(db.Model):
 
 #     def __repr__(self):
 #         return "<Datbase_Entry %r>" % self.id
+
+
 @app.route("/display")
 def render_tree():
     entries = family_input.query.order_by(family_input.id).all()
@@ -54,7 +56,9 @@ def index():
             return "don goofed"
     else:
         entries = family_input.query.order_by(family_input.id).all()
-        return render_template("index2.html", entries=entries)
+        return render_template(
+            "index2.html", entries=entries, entries_length=len(entries)
+        )
 
 
 @app.route("/delete/<int:id>")

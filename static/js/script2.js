@@ -1,6 +1,20 @@
 const img_height = 100;
 const img_width = 200;
 
+// const app = express();
+// app.listen(5000, () => console.log("listening at 5000"));
+// app.use(express.static("public"));
+// app.use(express.json({ limit: "1mb" }));
+
+// const database = new Datastore("../data/family_tree.db");
+// database.loadDatabase();
+
+// app.get("/api", (request, response) => {
+//   database.find({}, (err, data) => {
+//     response.json(data);
+//   });
+// });
+
 // stratifies data, provides x and y coord
 var dataStructure = d3
   .stratify()
