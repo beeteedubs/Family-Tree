@@ -8,9 +8,9 @@
     var data = [
         {% for entry in entries %}
     {% if "{{ entry.id }}" != entries | length %}
-    { name: "{{ entry.name }}", parent: "{{ entry.parent }}", spouse: "{{ entry.spouse }}", img: "Grandma.png" },
+    { name: "{{ entry.name }}", parent: "{{ entry.parent }}", img: "{{ entry.image }}" },
     {% else %}
-    { name: "{{ entry.name }}", parent: "{{ entry.parent }}", spouse: "{{ entry.spouse }}", img: "Grandma.png" }
+    { name: "{{ entry.name }}", parent: "{{ entry.parent }}", img: "{{ entry.image}}" }
     {% endif %}
     {% endfor %}
         ];
@@ -19,22 +19,20 @@
 {% endblock %}
 
 {% block head %}
-<img src='{{ url_for("static", filename="images/Grandma.jpg") }}' id="grandma" />
 <h1 style="text-align: center">Fam Tree Data</h1>
 {% endblock %}
 
 {% block body %}
+<script src='../static/js/script2.js'></script>
 <div class='form'>
     <form action="/" method="POST">
         <input type="text" name='Your Name' placeholder="Your Name" id=name>
         <input type="text" name="Father's Name" placeholder="Father's Name" id=parent>
-        <!-- <input type="text" name="Mother's Name" placeholder="Mother's Name" id=parent> -->
-        <!-- <input type="text" name="Spouse's Name" placeholder="Spouse's Name" id=spouse> -->
+        <input type="text" name="Image's Name" placeholder="Image's Name" id=image>
         <select name="Any Children?" placeholder="Any children?">
             <option disabled selected value="">Any children?</option>
             <option selected='selected' value="True">Yes, I have children</option>
             <option value="False">No, I have no children</option>
-
         </select>
         <input type='submit' name='Add Task'>
     </form>
@@ -48,7 +46,7 @@
             <th>ID</th>
             <th> Your Name</th>
             <th> Your Father's Name</th>
-            <!-- <th> Your Spouse's Name (if you got one)</th> -->
+            <th> Image's Name</th>
             <th> Any Children?</th>
             <th> Actions</th>
         </tr>
@@ -57,7 +55,7 @@
             <td>{{ entry.id }}</td>
             <td>{{ entry.name }}</td>
             <td>{{ entry.parent }}</td>
-            <!-- <td>{{ entry.spouse }}</td> -->
+            <td>{{ entry.image }}</td>
             <td>{{ entry.have_children }}</td>
             <td>
                 <a href="/delete/{{entry.id}}">Delete</a>

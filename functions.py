@@ -3,42 +3,22 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///family_tree.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///family.db"
 db = SQLAlchemy(app)
-# # app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://%s:@localhost/family_output" % (
-#     pw
-# )
 
 
 class family_input(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(225), nullable=False, default="Sasha")
     parent = db.Column(db.String(225), nullable=False, default="Sasha")
-    # spouse = db.Column(db.String(225), nullable=True, default="")
+    image = db.Column(db.String(225), nullable=False, default="Grandma.jpg")
     have_children = db.Column(db.String(225), nullable=False)
 
     def __repr__(self):
         return "<Fam %r>" % self.id
 
 
-# class database(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(225), nullable=False, default="Sasha")
-#     parent = db.Column(db.String(225), nullable=False, default="Sasha")
-#     spouse = db.Column(db.String(225), nullable=True, default="")
-#     have_children = db.Column(db.String(225), nullable=False)
-#     img =???????????????
-
-#     def __repr__(self):
-#         return "<Datbase_Entry %r>" % self.id
-
-# @app.route("/display/<string:pivot>")
-
-
-@app.route("/display")
-def render_tree():
-    entries = family_input.query.order_by(family_input.id).all()
-    return render_template("tree2.html", entries=entries)
+# @app.route("/display/<string:pivot>") Shoumyo's idea for onclick
 
 
 @app.route("/", methods=["POST", "GET"])
@@ -46,9 +26,11 @@ def index():
     if request.method == "POST":
         name = request.form.get("Your Name")
         father = request.form.get("Father's Name")
-        # spouse = request.form.get("Spouse's Name")
         children = request.form.get("Any Children?")
-        entry = family_input(name=name, parent=father, have_children=children)
+        image = request.form.get("Image's Name")
+        entry = family_input(
+            name=name, parent=father, have_children=children, image=image
+        )
 
         try:
             db.session.add(entry)
