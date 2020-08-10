@@ -3,8 +3,8 @@
   font-family: sans-serif;
 } */
 rect {
-  fill: none;
-  stroke: silver;
+  /* fill: white; */
+  /* stroke: silver; */
   width: 200px;
   height: 100px;
   stroke-width: 4px;

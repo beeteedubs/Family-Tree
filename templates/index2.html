@@ -3,17 +3,28 @@
 {% extends 'base2.html' %}
 
 {% block javascript %}
+<script>
+    // Data from database in JSON
+    var data = [
+        {% for entry in entries %}
+    {% if "{{ entry.id }}" != entries | length %}
+    { name: "{{ entry.name }}", parent: "{{ entry.parent }}", spouse: "{{ entry.spouse }}", img: "Grandma.png" },
+    {% else %}
+    { name: "{{ entry.name }}", parent: "{{ entry.parent }}", spouse: "{{ entry.spouse }}", img: "Grandma.png" }
+    {% endif %}
+    {% endfor %}
+        ];
+    console.log(data)
+</script>
 {% endblock %}
 
 {% block head %}
-<title>Family Tree</title>
+<img src='{{ url_for("static", filename="images/Grandma.jpg") }}' id="grandma" />
+<h1 style="text-align: center">Fam Tree Data</h1>
 {% endblock %}
 
 {% block body %}
-<a href='/display'>To Tree</a>
 <div id=details>
-    <h1 style="text-align: center">Fam Tree Data</h1>
-
     <script>
         // var img_height = 100;
         // var img_width = 200;

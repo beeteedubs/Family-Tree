@@ -1,54 +1,21 @@
-<!-- Transfers info from database to javascript for use in family tree -->
-
 {% extends 'base2.html' %}
 
 {% block javascript %}
-
-<script>
-
-    var data = [
-        {% for entry in entries %}
-    {% if "{{ entry.id }}" != entries | length %}
-    { name: "{{ entry.name }}", parent: "{{ entry.parent }}", spouse: "{{ entry.spouse }}", img: "Grandma.png" },
-    {% else %}
-    { name: "{{ entry.name }}", parent: "{{ entry.parent }}", spouse: "{{ entry.spouse }}", img: "Grandma.png" }
-    {% endif %}
-    {% endfor %}
-    ];
-    console.log(data)
-</script>
-
-<!-- // var data = [
-    //     {% for entry in entries %}
-    // { name: "{{ entry.name }}", parent: "{{ entry.parent }}", spouse: "{{ entry.spouse }}", img: "Grandma.png" },
-    // {% endfor %}
-    // { name: "Bye", parent: "", spouse: "", img: "Grandma.png" }
-
-    //     ]; -->
-
 {% endblock %}
 
 {% block head %}
-<title>Family Tree</title>
 {% endblock %}
 
 {% block body %}
-<a href='/'>Back to Table</a>
-<script src='../static/js/script2.js'></script>
-<img src="Grandma.jpg" id="grandma" />
-<script>
-    var express = require('express');
-    var app = express();
-    app.use(express.static('data'))
-    console.log('get grandma image');
-    fetch('Grandma.jpg')
-        .then(response => {
-            console.log(response);
-            return response.blob();
-        })
-        .then(blob => {
-            console.log(blob);
-            document.getElementById('grandma').src = URL.createObjectURL(blob);
-        })
-</script>
+<!-- <script src='../static/js/script2.js'></script> -->
+<!-- <svg height='500' width='800'>
+    <defs>
+        <pattern id='paula-deen' height='100%' width='100%' patternContentUnits='objectBoundingBox'>
+            <image height='1' width='1' preserveAspectRatio='xMidYMid slice' xmlns:xlink='http://www.w3.org/1999/xlink'
+                href='{{url_for("static", filename="images/Grandma.jpg")}}'></image>
+        </pattern>
+    </defs>
+    <circle cx='100' cy='100' r='80' fill='url(#paula-deen)'></circle>
+    <image src='{{ url_for("static", filename="images/Grandma.jpg") }}' />
+</svg> -->
 {% endblock %}

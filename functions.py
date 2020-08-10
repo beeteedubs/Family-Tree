@@ -32,6 +32,8 @@ class family_input(db.Model):
 #     def __repr__(self):
 #         return "<Datbase_Entry %r>" % self.id
 
+# @app.route("/display/<string:pivot>")
+
 
 @app.route("/display")
 def render_tree():
