@@ -14,8 +14,10 @@ var dataStructure = d3
 console.log("dataStructure: ");
 console.log(dataStructure);
 
-const tree_y = img_height * (dataStructure.height + 1);
-const tree_x = 2 ** (dataStructure.height + 1) * img_width;
+// const tree_y = img_height * (dataStructure.height + 1);
+// const tree_x = 2 ** (dataStructure.height + 1) * img_width;
+const tree_y = 400;
+const tree_x = 900;
 
 // creates a frame, anything past is cutt off, all elements shifted ↓ & → 50 px
 
