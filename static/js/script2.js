@@ -28,19 +28,6 @@ const svg = d3
   .attr("transform", "translate(100,100)");
 var defs = svg.append("defs");
 
-defs
-  .append("pattern")
-  .attr("id", "grandma")
-  .attr("height", "100%")
-  .attr("width", "100%")
-  .attr("patternContentUnits", "objectBoundingBox")
-  .append("image")
-  .attr("height", 1)
-  .attr("width", 1)
-  .attr("preserveAspectRatio", "None")
-  .attr("xmlns:xlink", "http://www.w3.org/1999/xlink")
-  .attr("xlink:href", "/static/images/Grandma.jpg");
-
 console.log("tree_y: " + tree_y);
 console.log("tree_x: " + tree_x);
 
@@ -87,6 +74,27 @@ connections
     );
   });
 
+defs
+  .selectAll(".family-image")
+  .data(data)
+  .enter()
+  .append("pattern")
+  .attr("class", "family-image")
+  .attr("id", function (d) {
+    return d.img;
+  })
+  .attr("height", "100%")
+  .attr("width", "100%")
+  .attr("patternContentUnits", "objectBoundingBox")
+  .append("image")
+  .attr("height", 1)
+  .attr("width", 1)
+  .attr("preserveAspectRatio", "none")
+  .attr("xmlns:xlink", "http://www.w3.org/1999/xlink")
+  .attr("xlink:href", function (d) {
+    return "/static/images/" + d.img;
+  });
+
 var rectangles = svg.selectAll("rect").data(information.descendants());
 rectangles
   .enter()
@@ -100,7 +108,12 @@ rectangles
   .attr("height", img_height)
   .attr("width", img_width)
   .attr("class", "rect")
-  .attr("fill", "url(#grandma)");
+  .attr("fill", function (d) {
+    return "url(#" + d.data.img + ")";
+  })
+  .on("click", function (d) {
+    console.log(d.data.img);
+  });
 // .attr("onclick", "console.log('hi')")
 
 // Names
@@ -118,3 +131,16 @@ names
     return d.y;
   })
   .classed("bigger", true);
+
+// DRAG AND DROP SHIT
+$(document).ready(function () {
+  $(".droparea")
+    .on("dragover", function (e) {
+      e.preventDefault();
+    })
+    .on("drop", function (e) {
+      e.preventDefault();
+      var files = e.originalEvent.dataTransfer.files;
+      console.log(files[0]);
+    });
+});

@@ -10,18 +10,24 @@
 <div class="content">
     <h1 style="text-align: center">Update Task</h1>
 
-    <div class="form">
-        <form action="/update/{{entry.id}}" method="POST">
+    <div class='form'>
+        <form action="/" method="POST" enctype="multipart/form-data">
             <input type="text" name='Your Name' placeholder="Your Name" id=name>
             <input type="text" name="Father's Name" placeholder="Father's Name" id=parent>
-            <!-- <input type="text" name="Mother's Name" placeholder="Mother's Name" id=parent> -->
-            <input type="text" name="Spouse's Name" placeholder="Spouse's Name" id=spouse>
+            <input type="text" name="Image's Name" placeholder="Image's Name" id=image>
             <select name="Any Children?" placeholder="Any children?">
                 <option disabled selected value="">Any children?</option>
-                <option value="True">Yes, I have children</option>
+                <option selected='selected' value="True">Yes, I have children</option>
                 <option value="False">No, I have no children</option>
             </select>
-            <input type='submit' name='Update Task'>
+            <div class="form-group">
+                <label>Select image</label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" name="image" id="image">
+                    <label class="custom-file-label" for="image">Select image...</label>
+                </div>
+            </div>
+            <input type='submit' name='Add Task'>
         </form>
     </div>
 </div>
