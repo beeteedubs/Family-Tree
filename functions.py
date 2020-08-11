@@ -1,4 +1,5 @@
-from flask import Flask, render_template, url_for, request, redirect, json
+import os
+from flask import Flask, render_template, url_for, request, redirect, json, flash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -19,6 +20,8 @@ class family_input(db.Model):
 
 
 # @app.route("/display/<string:pivot>") Shoumyo's idea for onclick
+UPLOAD_FOLDER = "static/images"
+app.config["IMAGE_UPLOADS"] = UPLOAD_FOLDER
 
 
 @app.route("/", methods=["POST", "GET"])
@@ -31,7 +34,10 @@ def index():
         entry = family_input(
             name=name, parent=father, have_children=children, image=image
         )
-
+        if request.files:
+            image = request.files["image"]
+            image.save(os.path.join(app.config["IMAGE_UPLOADS"], image.filename))
+            print("image saved")
         try:
             db.session.add(entry)
             db.session.commit()
@@ -64,8 +70,8 @@ def update(id):
     if request.method == "POST":
         entry.name = request.form["Your Name"]
         entry.parent = request.form["Father's Name"]
-        # entry.spouse = request.form["Spouse's Name"]
         entry.have_children = request.form["Any Children?"]
+        entry.image = request.form["image"]
 
         try:
             db.session.commit()
@@ -75,6 +81,15 @@ def update(id):
 
     else:
         return render_template("update2.html", entry=entry)
+
+
+# @app.route("/sendfile", methods=["POST"])
+# def send_file():
+#     fileob = request.files["file2upload"]
+#     filename = secure_filename(fileob.filename)
+#     save_path = #"{}/{}".format(app.config["UPLOAD_FOLDER"], filename)
+#     fileob.save(save_path)
+#     return "successful_upload"
 
 
 if __name__ == "__main__":
