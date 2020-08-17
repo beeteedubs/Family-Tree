@@ -11,14 +11,14 @@ var dataStructure = d3
     return d.parent;
   })(family_tree_data);
 
-var spouse_dataStructure = d3
-  .stratify()
-  .id(function (d) {
-    return d.name;
-  }) //the name in "d.name" needs to match data
-  .parentId(function (d) {
-    return d.parent;
-  })(spouse_data);
+// var spouse_dataStructure = d3
+//   .stratify()
+//   .id(function (d) {
+//     return d.name;
+//   }) //the name in "d.name" needs to match data
+//   .parentId(function (d) {
+//     return d.parent;
+//   })(spouse_data);
 
 // const tree_y = img_height * (dataStructure.height + 1);
 // const tree_x = 2 ** (dataStructure.height + 1) * img_width;
