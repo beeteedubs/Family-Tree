@@ -3,8 +3,7 @@
   font-family: sans-serif;
 } */
 rect {
-  width: 200px;
-  height: 100px;
+  border: red;
 }
 .droparea {
   width: 200px;

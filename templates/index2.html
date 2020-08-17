@@ -3,20 +3,88 @@
 {% extends 'base2.html' %}
 
 {% block javascript %}
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script>
-    // Data from database in JSON
-    var data = [
-        {% for entry in entries %}
-    {% if "{{ entry.id }}" != entries | length %}
-    { name: "{{ entry.name }}", parent: "{{ entry.parent }}", img: "{{ entry.image }}" },
-    {% else %}
-    { name: "{{ entry.name }}", parent: "{{ entry.parent }}", img: "{{ entry.image}}" }
+    var orphans = [];
+    var dummy = [];
+    var entries_js = [];
+    var family_tree_data = [];
+    var spouse_data = [];
+    var other_data = [];
+    {% for entry in entries %}
+    {% if entry.parent == "" %}
+    orphans.push({
+        name: "{{ entry.name }}",
+        parent: "{{ entry.parent }}",
+        img: "{{ entry.image }}",
+        spouse: "{{ entry.spouse}}"
+    })
+
     {% endif %}
+
+    entries_js.push({
+        name: "{{ entry.name }}",
+        parent: "{{ entry.parent }}",
+        img: "{{ entry.image }}",
+        spouse: "{{ entry.spouse}}"
+    })
     {% endfor %}
-        ];
-    console.log(data)
+
+    family_tree_data.push(orphans[0]) // only push first orphan given
+
+    console.log('-----------------------')
+    function arrayUnique(array) {
+        var a = array.concat();
+        for (var i = 0; i < a.length; ++i) {
+            for (var j = i + 1; j < a.length; ++j) {
+                if (a[i] === a[j])
+                    a.splice(j--, 1);
+            }
+        }
+
+        return a;
+    }
+    var x = 0
+    var to_be_added = []
+    var index;
+    while ((dummy.length != family_tree_data.length)) {// for loop which'll keep going until family_tree_Data has no more changes.
+        dummy = arrayUnique(family_tree_data.concat(dummy));
+        to_be_added = []
+        // // At the start of each loop, we set family_tree_data = dummy_list
+        entries_js.forEach((entry) => {
+            family_tree_data.forEach((data) => {
+                if (data.name == entry.parent && !family_tree_data.includes(entry)) {
+                    to_be_added.push(entry);
+                }
+                console.log('innermost loop')
+            })
+
+        })
+        to_be_added.forEach((element) => {
+            family_tree_data.push(element);
+            index = entries_js.indexOf(element);
+            if (index > -1) {
+                entries_js.splice(index, 1);
+            }
+        })
+
+    }
+
+    family_tree_data.forEach((data) => { //adds spouses of ppl in family_tree_data to spouse_data
+        entries_js.forEach((entry) => {
+            if (data.spouse == entry.name) {
+                spouse_data.push(entry)
+            }
+        })
+    })
+
+    console.log('family_tree_data');
+    console.log(family_tree_data)
+    console.log('spouse_data')
+    console.log(spouse_data)
+
 </script>
 {% endblock %}
 
@@ -30,9 +98,10 @@
 <script src='../static/js/script2.js'></script>
 <div class='form'>
     <form action="/" method="POST" enctype="multipart/form-data">
-        <input type="text" name='Your Name' placeholder="Your Name" id=name>
+        <input type="text" name='Your Name' placeholder="Your Name" id=name required>
         <input type="text" name="Father's Name" placeholder="Father's Name" id=parent>
         <input type="text" name="Image's Name" placeholder="Image's Name" id=image>
+        <input type="text" name="Spouse's Name" placeholder="Spouse's Name" id=spouse>
         <select name="Any Children?" placeholder="Any children?">
             <option disabled selected value="">Any children?</option>
             <option selected='selected' value="True">Yes, I have children</option>
@@ -58,6 +127,7 @@
             <th> Your Name</th>
             <th> Your Father's Name</th>
             <th> Image's Name</th>
+            <th> Spouse's Name </th>
             <th> Any Children?</th>
             <th> Actions</th>
         </tr>
@@ -67,6 +137,7 @@
             <td>{{ entry.name }}</td>
             <td>{{ entry.parent }}</td>
             <td>{{ entry.image }}</td>
+            <td>{{ entry.spouse }}</td>
             <td>{{ entry.have_children }}</td>
             <td>
                 <a href="/delete/{{entry.id}}">Delete</a>

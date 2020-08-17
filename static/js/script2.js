@@ -9,10 +9,16 @@ var dataStructure = d3
   }) //the name in "d.name" needs to match data
   .parentId(function (d) {
     return d.parent;
-  })(data);
+  })(family_tree_data);
 
-console.log("dataStructure: ");
-console.log(dataStructure);
+var spouse_dataStructure = d3
+  .stratify()
+  .id(function (d) {
+    return d.name;
+  }) //the name in "d.name" needs to match data
+  .parentId(function (d) {
+    return d.parent;
+  })(spouse_data);
 
 // const tree_y = img_height * (dataStructure.height + 1);
 // const tree_x = 2 ** (dataStructure.height + 1) * img_width;
@@ -32,7 +38,6 @@ var defs = svg.append("defs");
 
 console.log("tree_y: " + tree_y);
 console.log("tree_x: " + tree_x);
-
 // painting size, careful don't go too far, should not be bigger tha canvas size or svg size
 var treeStructure = d3.tree().size([tree_x, tree_y]);
 
@@ -52,6 +57,52 @@ function zoomed() {
 // // But if we dont use it, the code doent work
 var information = treeStructure(dataStructure);
 
+console.log("information links:");
+console.log(information.links());
+console.log("information descendants:");
+console.log(information.descendants());
+
+defs
+  .selectAll(".family-image")
+  .data(family_tree_data)
+  .enter()
+  .append("pattern")
+  .attr("class", "family-image")
+  .attr("id", function (d) {
+    return d.img;
+  })
+  .attr("height", "100%")
+  .attr("width", "100%")
+  .attr("patternContentUnits", "objectBoundingBox")
+  .append("image")
+  .attr("height", 1)
+  .attr("width", 1)
+  .attr("preserveAspectRatio", "none")
+  .attr("xmlns:xlink", "http://www.w3.org/1999/xlink")
+  .attr("xlink:href", function (d) {
+    return "/static/images/" + d.img;
+  });
+
+defs
+  .selectAll(".family-image")
+  .data(spouse_data)
+  .enter()
+  .append("pattern")
+  .attr("class", "family-image")
+  .attr("id", function (d) {
+    return d.img;
+  })
+  .attr("height", "100%")
+  .attr("width", "100%")
+  .attr("patternContentUnits", "objectBoundingBox")
+  .append("image")
+  .attr("height", 1)
+  .attr("width", 1)
+  .attr("preserveAspectRatio", "none")
+  .attr("xmlns:xlink", "http://www.w3.org/1999/xlink")
+  .attr("xlink:href", function (d) {
+    return "/static/images/" + d.img;
+  });
 // // Path drawing stuff??? why 20 -> variablize later with once we decide dimensions of buttons
 var connections = svg.append("g").selectAll("path").data(information.links());
 connections
@@ -76,28 +127,10 @@ connections
     );
   });
 
-defs
-  .selectAll(".family-image")
-  .data(data)
-  .enter()
-  .append("pattern")
-  .attr("class", "family-image")
-  .attr("id", function (d) {
-    return d.img;
-  })
-  .attr("height", "100%")
-  .attr("width", "100%")
-  .attr("patternContentUnits", "objectBoundingBox")
-  .append("image")
-  .attr("height", 1)
-  .attr("width", 1)
-  .attr("preserveAspectRatio", "none")
-  .attr("xmlns:xlink", "http://www.w3.org/1999/xlink")
-  .attr("xlink:href", function (d) {
-    return "/static/images/" + d.img;
-  });
-
-var rectangles = svg.selectAll("rect").data(information.descendants());
+var rectangles = svg
+  .append("g")
+  .selectAll("rect")
+  .data(information.descendants());
 rectangles
   .enter()
   .append("rect")
@@ -116,6 +149,7 @@ rectangles
   .on("click", function (d) {
     console.log(d.data.img);
   });
+
 // .attr("onclick", "console.log('hi')")
 
 // Names
@@ -131,8 +165,29 @@ names
   })
   .attr("y", function (d) {
     return d.y;
+  });
+
+//Spouse shit
+var spouseRectangles = svg
+  // .append("g")
+  .selectAll("rect")
+  .data(information.descendants());
+
+spouseRectangles
+  .enter()
+  .append("rect")
+  .attr("x", function (d) {
+    return d.x + (img_width + img_height) / 2;
   })
-  .classed("bigger", true);
+  .attr("y", function (d) {
+    return d.y - img_height / 2;
+  })
+  .attr("height", img_height)
+  .attr("width", img_width)
+  .attr("border", "red")
+  .attr("fill", function (d) {
+    return "url(#" + d.data.img + ")";
+  });
 
 // DRAG AND DROP SHIT
 $(document).ready(function () {

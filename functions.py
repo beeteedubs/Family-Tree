@@ -4,15 +4,16 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///family.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///with_spouse.db"
 db = SQLAlchemy(app)
 
 
 class family_input(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(225), nullable=False, default="Sasha")
-    parent = db.Column(db.String(225), nullable=False, default="Sasha")
-    image = db.Column(db.String(225), nullable=False, default="Grandma.jpg")
+    parent = db.Column(db.String(225), nullable=True)
+    image = db.Column(db.String(225), nullable=True, default="Grandma.jpg")
+    spouse = db.Column(db.String(225), nullable=True)
     have_children = db.Column(db.String(225), nullable=False)
 
     def __repr__(self):
@@ -31,9 +32,11 @@ def index():
         father = request.form.get("Father's Name")
         children = request.form.get("Any Children?")
         image = request.form.get("Image's Name")
+        spouse = request.form.get("Spouse's Name")
         entry = family_input(
-            name=name, parent=father, have_children=children, image=image
+            name=name, parent=father, have_children=children, image=image, spouse=spouse
         )
+
         if request.files:
             image = request.files["image"]
             image.save(os.path.join(app.config["IMAGE_UPLOADS"], image.filename))
@@ -46,9 +49,7 @@ def index():
             return "don goofed"
     else:
         entries = family_input.query.order_by(family_input.id).all()
-        return render_template(
-            "index2.html", entries=entries, entries_length=len(entries)
-        )
+        return render_template("index2.html", entries=entries)
 
 
 @app.route("/delete/<int:id>")
@@ -94,3 +95,4 @@ def update(id):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
