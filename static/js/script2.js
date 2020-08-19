@@ -106,43 +106,29 @@ connections
   .attr("stroke", "black")
   .attr("stroke-opacity", 1)
   .attr("d", function (d) {
-    if (d.source.data.spouse == "") {
-      return (
-        "M " +
-        d.source.x +
-        "," +
-        d.source.y +
-        " v " +
-        (img_height - 10) +
-        " H " +
-        d.target.x + //- img_height / 2 +
-        " V" +
-        d.target.y
-      );
-    } else {
-      return (
-        "M " +
-        (d.source.x + img_width * 0.75) +
-        "," +
-        d.source.y +
-        " v " +
-        (img_height - 10) +
-        " H " +
-        d.target.x + //- img_height / 2 +
-        " V" +
-        d.target.y
-      );
-    }
+    // start pt, control pt, 2nd control pt, end pt for curved path
+    return (
+      "M " +
+      d.source.x +
+      "," +
+      d.source.y +
+      " v " +
+      (img_height - 10) +
+      " H " +
+      d.target.x + //- img_height / 2 +
+      " V" +
+      d.target.y
+    );
   });
 
 var spouse_lines = svg
   .append("g")
-  .selectAll("circle")
+  .selectAll("rect")
   .data(spouse_information.descendants());
 
 spouse_lines
   .enter()
-  .append("circle")
+  .append("rect")
   .attr("x", function (d) {
     return d.x;
   })
@@ -161,6 +147,90 @@ spouse_lines
 var rectangles = svg
   .append("g")
   .selectAll("rect")
+  .data(information.descendants());
+rectangles
+  .enter()
+  .append("rect")
+  .attr("x", function (d) {
+    return d.x - img_width / 2;
+  })
+  .attr("y", function (d) {
+    return d.y - img_height / 2;
+  })
+  .attr("height", img_height)
+  .attr("width", img_width)
+  .attr("class", "rect")
+  .attr("fill", function (d) {
+    return "url(#" + d.data.img + ")";
+  })
+  .on("click", function (d) {
+    console.log(d.data.img);
+  });
+
+var spouseRectangles = svg
+  .append("g")
+  .selectAll("rect")
+  .data(spouse_information.descendants());
+spouseRectangles
+  .enter()
+  .append("rect")
+  .attr("x", function (d) {
+    return d.x + img_width;
+  })
+  .attr("y", function (d) {
+    return d.y - img_height / 2;
+  })
+  .attr("height", img_height)
+  .attr("width", img_width)
+  .attr("class", "rect")
+  .attr("fill", function (d) {
+    return "url(#" + d.data.img + ")";
+  })
+  .classed("hide", function (d) {
+    if (d.data.name.includes("_spouse")) return true;
+    else return false;
+  });
+
+// Names
+var names = svg.append("g").selectAll("text").data(information.descendants());
+names
+  .enter()
+  .append("text")
+  .text(function (d) {
+    return d.data.name;
+  })
+  .attr("x", function (d) {
+    return d.x;
+  })
+  .attr("y", function (d) {
+    return d.y;
+  });
+
+var spouse_names = svg
+  .append("g")
+  .selectAll("text")
+  .data(spouse_information.descendants());
+spouse_names
+  .enter()
+  .append("text")
+  .text(function (d) {
+    return d.data.name;
+  })
+  .attr("x", function (d) {
+    return d.x + img_width * 1.5;
+  })
+  .attr("y", function (d) {
+    return d.y;
+  })
+  .classed("hide", function (d) {
+    if (d.data.name.includes("_spouse")) return true;
+    else return false;
+  });
+
+// DRAG AND DROP SHIT
+$(document).ready(function () {
+  $(".droparea")
+    .on("dragover", function (e) {
       e.preventDefault();
     })
     .on("drop", function (e) {
