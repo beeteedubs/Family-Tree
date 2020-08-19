@@ -137,12 +137,12 @@ connections
 
 var spouse_lines = svg
   .append("g")
-  .selectAll("rect")
+  .selectAll("circle")
   .data(spouse_information.descendants());
 
 spouse_lines
   .enter()
-  .append("rect")
+  .append("circle")
   .attr("x", function (d) {
     return d.x;
   })
@@ -161,90 +161,6 @@ spouse_lines
 var rectangles = svg
   .append("g")
   .selectAll("rect")
-  .data(information.descendants());
-rectangles
-  .enter()
-  .append("rect")
-  .attr("x", function (d) {
-    return d.x - img_width / 2;
-  })
-  .attr("y", function (d) {
-    return d.y - img_height / 2;
-  })
-  .attr("height", img_height)
-  .attr("width", img_width)
-  .attr("class", "rect")
-  .attr("fill", function (d) {
-    return "url(#" + d.data.img + ")";
-  })
-  .on("click", function (d) {
-    console.log(d.data.img);
-  });
-
-var spouseRectangles = svg
-  .append("g")
-  .selectAll("rect")
-  .data(spouse_information.descendants());
-spouseRectangles
-  .enter()
-  .append("rect")
-  .attr("x", function (d) {
-    return d.x + img_width;
-  })
-  .attr("y", function (d) {
-    return d.y - img_height / 2;
-  })
-  .attr("height", img_height)
-  .attr("width", img_width)
-  .attr("class", "rect")
-  .attr("fill", function (d) {
-    return "url(#" + d.data.img + ")";
-  })
-  .classed("hide", function (d) {
-    if (d.data.name.includes("_spouse")) return true;
-    else return false;
-  });
-
-// Names
-var names = svg.append("g").selectAll("text").data(information.descendants());
-names
-  .enter()
-  .append("text")
-  .text(function (d) {
-    return d.data.name;
-  })
-  .attr("x", function (d) {
-    return d.x;
-  })
-  .attr("y", function (d) {
-    return d.y;
-  });
-
-var spouse_names = svg
-  .append("g")
-  .selectAll("text")
-  .data(spouse_information.descendants());
-spouse_names
-  .enter()
-  .append("text")
-  .text(function (d) {
-    return d.data.name;
-  })
-  .attr("x", function (d) {
-    return d.x + img_width * 1.5;
-  })
-  .attr("y", function (d) {
-    return d.y;
-  })
-  .classed("hide", function (d) {
-    if (d.data.name.includes("_spouse")) return true;
-    else return false;
-  });
-
-// DRAG AND DROP SHIT
-$(document).ready(function () {
-  $(".droparea")
-    .on("dragover", function (e) {
       e.preventDefault();
     })
     .on("drop", function (e) {

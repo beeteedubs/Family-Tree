@@ -111,10 +111,16 @@
                     if (data.parent != "") {//for non-root nodes
                         family_tree_data.forEach((parent) => {
                             if (parent.name == data.parent) {
-                                spouse_parent = parent.name;
+                                if (parent.spouse != "") {
+                                    spouse_parent = parent.spouse
+                                    entry_obj = { name: data.spouse, parent: spouse_parent, img: entry.img }
+                                }
+                                else {
+                                    spouse_parent = parent.name;
+                                    entry_obj = { name: data.spouse, parent: spouse_parent + '_spouse', img: entry.img }
+                                }
                             }
                         })
-                        entry_obj = { name: data.spouse, parent: spouse_parent + '_spouse', img: entry.img }
                         spouse_data.push(entry_obj); //pushing spouse
                     }
                     else {
@@ -125,6 +131,12 @@
             })
         }
     })
+
+
+
+    // copy family tree data, switch spouse n name
+    // if spouse is blank, then switch name to be spouse's name + "spouse"
+    // replace img w/ by searching in spouse data/s img values
     // copy family tree data, switch spouse n name
     // if spouse is blank, then switch name to be spouse's name + "spouse"
     // replace img w/ by searching in spouse data/s img values
