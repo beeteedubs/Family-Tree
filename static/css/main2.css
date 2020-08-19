@@ -3,7 +3,10 @@
   font-family: sans-serif;
 } */
 rect {
-  stroke: blue;
+  stroke: black;
+}
+.hide {
+  visibility: hidden;
 }
 .droparea {
   width: 200px;

@@ -1,5 +1,5 @@
-const img_height = 70;
-const img_width = 140;
+const img_height = 50;
+const img_width = 100;
 
 // stratifies data, provides x and y coord
 var dataStructure = d3
@@ -121,6 +121,29 @@ connections
     );
   });
 
+var spouse_lines = svg
+  .append("g")
+  .selectAll("rect")
+  .data(spouse_information.descendants());
+
+spouse_lines
+  .enter()
+  .append("rect")
+  .attr("x", function (d) {
+    return d.x;
+  })
+  .attr("y", function (d) {
+    return d.y;
+  })
+  .attr("height", 0.5)
+  .attr("width", 150)
+  .attr("class", "rect")
+  .attr("stroke", "red")
+  .classed("hide", function (d) {
+    if (d.data.name.includes("_spouse")) return true;
+    else return false;
+  });
+
 var rectangles = svg
   .append("g")
   .selectAll("rect")
@@ -144,7 +167,29 @@ rectangles
     console.log(d.data.img);
   });
 
-// .attr("onclick", "console.log('hi')")
+var spouseRectangles = svg
+  .append("g")
+  .selectAll("rect")
+  .data(spouse_information.descendants());
+spouseRectangles
+  .enter()
+  .append("rect")
+  .attr("x", function (d) {
+    return d.x + img_width;
+  })
+  .attr("y", function (d) {
+    return d.y - img_height / 2;
+  })
+  .attr("height", img_height)
+  .attr("width", img_width)
+  .attr("class", "rect")
+  .attr("fill", function (d) {
+    return "url(#" + d.data.img + ")";
+  })
+  .classed("hide", function (d) {
+    if (d.data.name.includes("_spouse")) return true;
+    else return false;
+  });
 
 // Names
 var names = svg.append("g").selectAll("text").data(information.descendants());
@@ -161,26 +206,25 @@ names
     return d.y;
   });
 
-//Spouse shit
-var spouseRectangles = svg
+var spouse_names = svg
   .append("g")
-  .selectAll("rect")
+  .selectAll("text")
   .data(spouse_information.descendants());
-
-spouseRectangles
+spouse_names
   .enter()
-  .append("rect")
+  .append("text")
+  .text(function (d) {
+    return d.data.name;
+  })
   .attr("x", function (d) {
-    return d.x + (img_width + img_height) / 2;
+    return d.x + img_width * 1.5;
   })
   .attr("y", function (d) {
-    return d.y - img_height / 2;
+    return d.y;
   })
-  .attr("height", img_height)
-  .attr("width", img_width)
-  .attr("class", "rect")
-  .attr("fill", function (d) {
-    return "url(#" + d.data.img + ")";
+  .classed("hide", function (d) {
+    if (d.data.name.includes("_spouse")) return true;
+    else return false;
   });
 
 // DRAG AND DROP SHIT
