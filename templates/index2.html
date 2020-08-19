@@ -1,0 +1,206 @@
+<!-- Contains the form for databse input and chart taht displays databse info -->
+
+{% extends 'base2.html' %}
+
+{% block javascript %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    var orphans = [];
+    var dummy = [];
+    var entries_js = [];
+    var entries_2js = [];
+    var family_tree_data = [];
+    var spouse_data = [];
+    var other_data = [];
+    var entry_obj;
+    {% for entry in entries %}
+    {% if entry.parent == "" %}
+    orphans.push({
+        name: "{{ entry.name }}",
+        parent: "{{ entry.parent }}",
+        img: "{{ entry.image }}",
+        spouse: "{{ entry.spouse}}"
+    })
+
+    {% endif %}
+
+    entries_js.push({
+        name: "{{ entry.name }}",
+        parent: "{{ entry.parent }}",
+        img: "{{ entry.image }}",
+        spouse: "{{ entry.spouse}}"
+    })
+    entries_2js.push({
+        name: "{{ entry.name }}",
+        parent: "{{ entry.parent }}",
+        img: "{{ entry.image }}",
+        spouse: "{{ entry.spouse}}"
+    })
+    {% endfor %}
+
+    console.log('-----------------------')
+    function arrayUnique(array) {
+        var a = array.concat();
+        for (var i = 0; i < a.length; ++i) {
+            for (var j = i + 1; j < a.length; ++j) {
+                if (a[i] === a[j])
+                    a.splice(j--, 1);
+            }
+        }
+
+        return a;
+    }
+    var x = 0
+    var to_be_added = []
+    var index;
+    family_tree_data.push(orphans[0]) // only push first orphan given
+
+
+    while ((dummy.length != family_tree_data.length)) {// for loop which'll keep going until family_tree_Data has no more changes.
+        dummy = arrayUnique(family_tree_data.concat(dummy));
+        to_be_added = []
+        // // At the start of each loop, we set family_tree_data = dummy_list
+        entries_js.forEach((entry) => {
+            family_tree_data.forEach((data) => {
+                if (data.name == entry.parent && !family_tree_data.includes(entry)) {
+                    to_be_added.push(entry);
+                }
+                console.log('innermost loop')
+            })
+
+        })
+        to_be_added.forEach((element) => {
+            family_tree_data.push(element);
+            index = entries_js.indexOf(element);
+            if (index > -1) {
+                entries_js.splice(index, 1);
+            }
+        })
+
+    }
+
+    entries_js.splice(0, 1)
+    // look through each entry of family tree data
+    // 
+    // 4th: look at data.parent's spouse info, if spouse exists, rename spouse_data entry's parent with that spouse. 
+    // 5th: if data.parent's spouse doesn't exist, rename spouse_data entry's parent with data.parent
+
+    family_tree_data.forEach((data) => { //adds spouses of ppl in family_tree_data to spouse_data
+        var spouse_parent;
+        if (data.spouse == "") {//spousless
+            if (data.parent != "") {//non-root node only
+                family_tree_data.forEach((parent) => {
+                    if (parent.name == data.parent) {//if found spouseless parent of current data
+                        if (parent.spouse == "") {
+                            spouse_parent = parent.name;
+                            entry_obj = { name: data.name + '_spouse', parent: spouse_parent + '_spouse', img: '' }// 
+                            spouse_data.push(entry_obj);
+                        } else {//found spouseFUL parent, reassign parent to be your spouse's parent's spouse
+                            spouse_parent = parent.spouse;
+                            entry_obj = { name: data.name + '_spouse', parent: spouse_parent, img: '' }// 
+                            spouse_data.push(entry_obj);
+                        }
+                    }
+
+                })
+            }
+            else {//for root node
+                entry_obj = { name: data.name + '_spouse', parent: "", img: '' }
+                spouse_data.push(entry_obj);
+            }
+        } else {//gots a spouse, so look through spouse list
+            entries_js.forEach((entry) => {
+                if (data.spouse == entry.name) {//found spouse
+                    if (data.parent != "") {//for non-root nodes
+                        family_tree_data.forEach((parent) => {
+                            if (parent.name == data.parent) {
+                                spouse_parent = parent.name;
+                                entry.parent = spouse_parent
+                            }
+                        })
+                        entry_obj = { name: data.spouse, parent: spouse_parent + '_spouse', img: entry.img }
+                        spouse_data.push(entry_obj); //pushing spouse
+                    }
+
+                }
+            })
+        }
+    })
+    // copy family tree data, switch spouse n name
+    // if spouse is blank, then switch name to be spouse's name + "spouse"
+    // replace img w/ by searching in spouse data/s img values
+    console.log('entries_js')
+    console.log(entries_js)
+
+    console.log('family_tree_data');
+    console.log(family_tree_data)
+    console.log('spouse_data')
+    console.log(spouse_data)
+
+</script>
+{% endblock %}
+
+{% block head %}
+<h1 style="text-align: center">Fam Tree Data</h1>
+{% endblock %}
+
+{% block body %}
+
+
+<script src='../static/js/script2.js'></script>
+<div class='form'>
+    <form action="/" method="POST" enctype="multipart/form-data">
+        <input type="text" name='Your Name' placeholder="Your Name" id=name required>
+        <input type="text" name="Father's Name" placeholder="Father's Name" id=parent>
+        <input type="text" name="Image's Name" placeholder="Image's Name" id=image>
+        <input type="text" name="Spouse's Name" placeholder="Spouse's Name" id=spouse>
+        <select name="Any Children?" placeholder="Any children?">
+            <option disabled selected value="">Any children?</option>
+            <option selected='selected' value="True">Yes, I have children</option>
+            <option value="False">No, I have no children</option>
+        </select>
+        <div class="form-group">
+            <label>Select image</label>
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" name="image" id="image">
+                <label class="custom-file-label" for="image">Select image...</label>
+            </div>
+        </div>
+        <input type='submit' name='Add Task'>
+    </form>
+</div>
+<div class="content">
+    {% if entries|length < 1 %}
+    <h4 style="text-align: center">There are no family entries. Create one below!</h4>
+    {% else %}
+    <table>
+        <tr>
+            <th>ID</th>
+            <th> Your Name</th>
+            <th> Your Father's Name</th>
+            <th> Image's Name</th>
+            <th> Spouse's Name </th>
+            <th> Any Children?</th>
+            <th> Actions</th>
+        </tr>
+        {% for entry in entries %}
+        <tr>
+            <td>{{ entry.id }}</td>
+            <td>{{ entry.name }}</td>
+            <td>{{ entry.parent }}</td>
+            <td>{{ entry.image }}</td>
+            <td>{{ entry.spouse }}</td>
+            <td>{{ entry.have_children }}</td>
+            <td>
+                <a href="/delete/{{entry.id}}">Delete</a>
+                <br>
+                <a href="/update/{{entry.id}}">Update</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</div>
+{% endblock %}
