@@ -10,7 +10,6 @@
     var orphans = [];
     var dummy = [];
     var entries_js = [];
-    var entries_2js = [];
     var family_tree_data = [];
     var spouse_data = [];
     var other_data = [];
@@ -27,12 +26,6 @@
     {% endif %}
 
     entries_js.push({
-        name: "{{ entry.name }}",
-        parent: "{{ entry.parent }}",
-        img: "{{ entry.image }}",
-        spouse: "{{ entry.spouse}}"
-    })
-    entries_2js.push({
         name: "{{ entry.name }}",
         parent: "{{ entry.parent }}",
         img: "{{ entry.image }}",
@@ -111,19 +104,23 @@
                 spouse_data.push(entry_obj);
             }
         } else {//gots a spouse, so look through spouse list
+            console.log('checking entries_js');
+            console.log(entries_js)
             entries_js.forEach((entry) => {
                 if (data.spouse == entry.name) {//found spouse
                     if (data.parent != "") {//for non-root nodes
                         family_tree_data.forEach((parent) => {
                             if (parent.name == data.parent) {
                                 spouse_parent = parent.name;
-                                entry.parent = spouse_parent
                             }
                         })
                         entry_obj = { name: data.spouse, parent: spouse_parent + '_spouse', img: entry.img }
                         spouse_data.push(entry_obj); //pushing spouse
                     }
-
+                    else {
+                        entry_obj = { name: data.spouse, parent: "", img: entry.img }
+                        spouse_data.push(entry_obj); //pushing spouse
+                    }
                 }
             })
         }

@@ -106,19 +106,33 @@ connections
   .attr("stroke", "black")
   .attr("stroke-opacity", 1)
   .attr("d", function (d) {
-    // start pt, control pt, 2nd control pt, end pt for curved path
-    return (
-      "M " +
-      d.source.x +
-      "," +
-      d.source.y +
-      " v " +
-      (img_height - 10) +
-      " H " +
-      d.target.x + //- img_height / 2 +
-      " V" +
-      d.target.y
-    );
+    if (d.source.data.spouse == "") {
+      return (
+        "M " +
+        d.source.x +
+        "," +
+        d.source.y +
+        " v " +
+        (img_height - 10) +
+        " H " +
+        d.target.x + //- img_height / 2 +
+        " V" +
+        d.target.y
+      );
+    } else {
+      return (
+        "M " +
+        (d.source.x + img_width * 0.75) +
+        "," +
+        d.source.y +
+        " v " +
+        (img_height - 10) +
+        " H " +
+        d.target.x + //- img_height / 2 +
+        " V" +
+        d.target.y
+      );
+    }
   });
 
 var spouse_lines = svg
