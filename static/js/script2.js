@@ -20,8 +20,6 @@ var spouse_dataStructure = d3
     return d.parent;
   })(spouse_data);
 
-// const tree_y = img_height * (dataStructure.height + 1);
-// const tree_x = 2 ** (dataStructure.height + 1) * img_width;
 const tree_y = 400;
 const tree_x = 1000;
 
@@ -34,11 +32,10 @@ const svg = d3
   .attr("height", 2 * tree_y)
   .append("g")
   .attr("transform", "translate(100,100)");
+
 var defs = svg.append("defs");
 var spouse_defs = svg.append("defs");
 
-console.log("tree_y: " + tree_y);
-console.log("tree_x: " + tree_x);
 // painting size, careful don't go too far, should not be bigger tha canvas size or svg size
 var treeStructure = d3.tree().size([tree_x, tree_y]);
 
@@ -58,12 +55,6 @@ function zoomed() {
 // // But if we dont use it, the code doent work
 var spouse_information = treeStructure(spouse_dataStructure);
 var information = treeStructure(dataStructure);
-
-// console.log("information links:");
-// console.log(information.links());
-// console.log("information descendants:");
-// console.log(information.descendants());
-// console.log("spouse_information.");
 
 defs
   .selectAll(".family-image")

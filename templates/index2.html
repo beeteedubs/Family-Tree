@@ -95,11 +95,11 @@
                     if (parent.name == data.parent) {//if found spouseless parent of current data
                         if (parent.spouse == "") {
                             spouse_parent = parent.name;
-                            entry_obj = { name: data.name + '_spouse', parent: spouse_parent + '_spouse' }// 
+                            entry_obj = { name: data.name + '_spouse', parent: spouse_parent + '_spouse', img: '' }// 
                             spouse_data.push(entry_obj);
                         } else {//found spouseFUL parent, reassign parent to be your spouse's parent's spouse
                             spouse_parent = parent.spouse;
-                            entry_obj = { name: data.name + '_spouse', parent: spouse_parent }// 
+                            entry_obj = { name: data.name + '_spouse', parent: spouse_parent, img: '' }// 
                             spouse_data.push(entry_obj);
                         }
                     }
@@ -107,7 +107,7 @@
                 })
             }
             else {//for root node
-                entry_obj = { name: data.name + '_spouse', parent: "" }
+                entry_obj = { name: data.name + '_spouse', parent: "", img: '' }
                 spouse_data.push(entry_obj);
             }
         } else {//gots a spouse, so look through spouse list
@@ -120,7 +120,7 @@
                                 entry.parent = spouse_parent
                             }
                         })
-                        entry_obj = { name: data.spouse, parent: spouse_parent + '_spouse' }
+                        entry_obj = { name: data.spouse, parent: spouse_parent + '_spouse', img: entry.img }
                         spouse_data.push(entry_obj); //pushing spouse
                     }
 
