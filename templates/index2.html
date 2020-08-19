@@ -10,9 +10,11 @@
     var orphans = [];
     var dummy = [];
     var entries_js = [];
+    var entries_2js = [];
     var family_tree_data = [];
     var spouse_data = [];
     var other_data = [];
+    var entry_obj;
     {% for entry in entries %}
     {% if entry.parent == "" %}
     orphans.push({
@@ -30,9 +32,13 @@
         img: "{{ entry.image }}",
         spouse: "{{ entry.spouse}}"
     })
+    entries_2js.push({
+        name: "{{ entry.name }}",
+        parent: "{{ entry.parent }}",
+        img: "{{ entry.image }}",
+        spouse: "{{ entry.spouse}}"
+    })
     {% endfor %}
-
-    family_tree_data.push(orphans[0]) // only push first orphan given
 
     console.log('-----------------------')
     function arrayUnique(array) {
@@ -49,6 +55,9 @@
     var x = 0
     var to_be_added = []
     var index;
+    family_tree_data.push(orphans[0]) // only push first orphan given
+
+
     while ((dummy.length != family_tree_data.length)) {// for loop which'll keep going until family_tree_Data has no more changes.
         dummy = arrayUnique(family_tree_data.concat(dummy));
         to_be_added = []
@@ -72,13 +81,58 @@
 
     }
 
+    entries_js.splice(0, 1)
+    // look through each entry of family tree data
+    // 
+    // 4th: look at data.parent's spouse info, if spouse exists, rename spouse_data entry's parent with that spouse. 
+    // 5th: if data.parent's spouse doesn't exist, rename spouse_data entry's parent with data.parent
+
     family_tree_data.forEach((data) => { //adds spouses of ppl in family_tree_data to spouse_data
-        entries_js.forEach((entry) => {
-            if (data.spouse == entry.name) {
-                spouse_data.push(entry)
+        var spouse_parent;
+        if (data.spouse == "") {//spousless
+            if (data.parent != "") {//non-root node only
+                family_tree_data.forEach((parent) => {
+                    if (parent.name == data.parent) {//if found spouseless parent of current data
+                        if (parent.spouse == "") {
+                            spouse_parent = parent.name;
+                            entry_obj = { name: data.name + '_spouse', parent: spouse_parent + '_spouse' }// 
+                            spouse_data.push(entry_obj);
+                        } else {//found spouseFUL parent, reassign parent to be your spouse's parent's spouse
+                            spouse_parent = parent.spouse;
+                            entry_obj = { name: data.name + '_spouse', parent: spouse_parent }// 
+                            spouse_data.push(entry_obj);
+                        }
+                    }
+
+                })
             }
-        })
+            else {//for root node
+                entry_obj = { name: data.name + '_spouse', parent: "" }
+                spouse_data.push(entry_obj);
+            }
+        } else {//gots a spouse, so look through spouse list
+            entries_js.forEach((entry) => {
+                if (data.spouse == entry.name) {//found spouse
+                    if (data.parent != "") {//for non-root nodes
+                        family_tree_data.forEach((parent) => {
+                            if (parent.name == data.parent) {
+                                spouse_parent = parent.name;
+                                entry.parent = spouse_parent
+                            }
+                        })
+                        entry_obj = { name: data.spouse, parent: spouse_parent + '_spouse' }
+                        spouse_data.push(entry_obj); //pushing spouse
+                    }
+
+                }
+            })
+        }
     })
+    // copy family tree data, switch spouse n name
+    // if spouse is blank, then switch name to be spouse's name + "spouse"
+    // replace img w/ by searching in spouse data/s img values
+    console.log('entries_js')
+    console.log(entries_js)
 
     console.log('family_tree_data');
     console.log(family_tree_data)

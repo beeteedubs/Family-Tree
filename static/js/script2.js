@@ -1,5 +1,5 @@
-const img_height = 100;
-const img_width = 200;
+const img_height = 70;
+const img_width = 140;
 
 // stratifies data, provides x and y coord
 var dataStructure = d3
@@ -11,19 +11,19 @@ var dataStructure = d3
     return d.parent;
   })(family_tree_data);
 
-// var spouse_dataStructure = d3
-//   .stratify()
-//   .id(function (d) {
-//     return d.name;
-//   }) //the name in "d.name" needs to match data
-//   .parentId(function (d) {
-//     return d.parent;
-//   })(spouse_data);
+var spouse_dataStructure = d3
+  .stratify()
+  .id(function (d) {
+    return d.name;
+  }) //the name in "d.name" needs to match data
+  .parentId(function (d) {
+    return d.parent;
+  })(spouse_data);
 
 // const tree_y = img_height * (dataStructure.height + 1);
 // const tree_x = 2 ** (dataStructure.height + 1) * img_width;
 const tree_y = 400;
-const tree_x = 900;
+const tree_x = 1000;
 
 // creates a frame, anything past is cutt off, all elements shifted ↓ & → 50 px
 
@@ -35,6 +35,7 @@ const svg = d3
   .append("g")
   .attr("transform", "translate(100,100)");
 var defs = svg.append("defs");
+var spouse_defs = svg.append("defs");
 
 console.log("tree_y: " + tree_y);
 console.log("tree_x: " + tree_x);
@@ -55,12 +56,14 @@ function zoomed() {
 
 // //??? doesn't seem necessary according to prints of descendants and links
 // // But if we dont use it, the code doent work
+var spouse_information = treeStructure(spouse_dataStructure);
 var information = treeStructure(dataStructure);
 
-console.log("information links:");
-console.log(information.links());
-console.log("information descendants:");
-console.log(information.descendants());
+// console.log("information links:");
+// console.log(information.links());
+// console.log("information descendants:");
+// console.log(information.descendants());
+// console.log("spouse_information.");
 
 defs
   .selectAll(".family-image")
@@ -83,7 +86,7 @@ defs
     return "/static/images/" + d.img;
   });
 
-defs
+spouse_defs
   .selectAll(".family-image")
   .data(spouse_data)
   .enter()
@@ -169,9 +172,9 @@ names
 
 //Spouse shit
 var spouseRectangles = svg
-  // .append("g")
+  .append("g")
   .selectAll("rect")
-  .data(information.descendants());
+  .data(spouse_information.descendants());
 
 spouseRectangles
   .enter()
@@ -184,7 +187,7 @@ spouseRectangles
   })
   .attr("height", img_height)
   .attr("width", img_width)
-  .attr("border", "red")
+  .attr("class", "rect")
   .attr("fill", function (d) {
     return "url(#" + d.data.img + ")";
   });
