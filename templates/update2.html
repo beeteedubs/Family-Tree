@@ -7,24 +7,35 @@
 {% endblock %}
 
 {% block body %}
+<script type="text/javascript">
+    function alertFilename() {
+        var thefile = document.getElementById('image');
+        thefile = thefile.value.replace(/.*[\/\\]/, '');
+        var input = document.getElementById('image_name');
+        input.value = thefile;
+    }
+</script>
+
 <div class="content">
     <h1 style="text-align: center">Update Task</h1>
 
     <div class='form'>
-        <form action="/" method="POST" enctype="multipart/form-data">
-            <input type="text" name='Your Name' placeholder="Your Name" id=name required>
-            <input type="text" name="Father's Name" placeholder="Father's Name" id=parent>
-            <input type="text" name="Image's Name" placeholder="Image's Name" id=image>
+        <form action="/update/{{entry.id}}" method="POST" enctype="multipart/form-data">
+            <input type="text" name='Your Name' placeholder="Your Name" value='{{entry.name}}' id=name required>
+            <input type="text" name="Father's Name" placeholder="Father's Name" value='{{entry.parent}}' id=parent>
+            <input type="text" name="Image's Name" placeholder="Image's Name" value='{{entry.image}}' class='hide'
+                id=image_name>
+            <input type="text" name="Spouse's Name" placeholder="Spouse Name" value='{{entry.spouse}}' id=spouse>
             <select name="Any Children?" placeholder="Any children?">
                 <option disabled selected value="">Any children?</option>
                 <option selected='selected' value="True">Yes, I have children</option>
                 <option value="False">No, I have no children</option>
             </select>
             <div class="form-group">
-                <label>Select image</label>
+                <label></label>
                 <div class="custom-file">
-                    <input type="file" class="custom-file-input" name="image" id="image">
-                    <label class="custom-file-label" for="image">Select image...</label>
+                    <input type="file" name="image" id="image" onchange='alertFilename()'>
+                    <label for="image">Don't choose an image if you are happy with what you have<label>
                 </div>
             </div>
             <input type='submit' name='Add Task'>

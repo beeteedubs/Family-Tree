@@ -1,5 +1,6 @@
 const img_height = 50;
 const img_width = 100;
+const canvas_inf = 2;
 
 // stratifies data, provides x and y coord
 var dataStructure = d3
@@ -20,8 +21,8 @@ var spouse_dataStructure = d3
     return d.parent;
   })(spouse_data);
 
-const tree_y = 400;
-const tree_x = 1000;
+const tree_y = 2 * img_height * (dataStructure.height + 1);
+const tree_x = 11 * 300;
 
 // creates a frame, anything past is cutt off, all elements shifted ↓ & → 50 px
 
@@ -37,7 +38,12 @@ var defs = svg.append("defs");
 var spouse_defs = svg.append("defs");
 
 // painting size, careful don't go too far, should not be bigger tha canvas size or svg size
-var treeStructure = d3.tree().size([tree_x, tree_y]);
+var treeStructure = d3
+  .tree()
+  .separation(function (a, b) {
+    return a.parent == b.parent ? 1.25 : 1.25;
+  })
+  .size([tree_x, tree_y]);
 
 svg.call(
   d3
@@ -97,7 +103,7 @@ spouse_defs
   .attr("xlink:href", function (d) {
     return "/static/images/" + d.img;
   });
-// // Path drawing stuff??? why 20 -> variablize later with once we decide dimensions of buttons
+
 var connections = svg.append("g").selectAll("path").data(information.links());
 connections
   .enter()
@@ -105,8 +111,23 @@ connections
   .attr("fill", "none")
   .attr("stroke", "black")
   .attr("stroke-opacity", 1)
+  .attr("stroke-width", 2)
   .attr("d", function (d) {
-    // start pt, control pt, 2nd control pt, end pt for curved path
+    if (d.source.data.spouse != "") {
+      // has spouse!
+      return (
+        "M " +
+        (d.source.x + img_width * 0.75) +
+        "," +
+        d.source.y +
+        " v " +
+        img_height +
+        " H " +
+        d.target.x + //- img_height / 2 +
+        " V" +
+        d.target.y
+      );
+    }
     return (
       "M " +
       d.source.x +
@@ -121,33 +142,37 @@ connections
     );
   });
 
-var spouse_lines = svg
+var spouse_lines = svg // just the horizontal line
   .append("g")
-  .selectAll("rect")
+  .selectAll("path")
   .data(spouse_information.descendants());
 
 spouse_lines
   .enter()
-  .append("rect")
-  .attr("x", function (d) {
-    return d.x;
+  .append("path")
+  .attr("fill", "none")
+  .attr("stroke", "black")
+  .attr("stroke-opacity", 1)
+  .attr("stroke-width", 2)
+  .attr("d", function (d) {
+    return "M " + d.x + "," + d.y + "h" + img_width;
   })
-  .attr("y", function (d) {
-    return d.y;
-  })
-  .attr("height", 0.5)
-  .attr("width", 150)
-  .attr("class", "rect")
-  .attr("stroke", "red")
   .classed("hide", function (d) {
     if (d.data.name.includes("_spouse")) return true;
     else return false;
   });
 
+// Rectangles ----------------------------------------------------------------
 var rectangles = svg
   .append("g")
   .selectAll("rect")
   .data(information.descendants());
+
+var spouseRectangles = svg
+  .append("g")
+  .selectAll("rect")
+  .data(spouse_information.descendants());
+
 rectangles
   .enter()
   .append("rect")
@@ -162,15 +187,8 @@ rectangles
   .attr("class", "rect")
   .attr("fill", function (d) {
     return "url(#" + d.data.img + ")";
-  })
-  .on("click", function (d) {
-    console.log(d.data.img);
   });
 
-var spouseRectangles = svg
-  .append("g")
-  .selectAll("rect")
-  .data(spouse_information.descendants());
 spouseRectangles
   .enter()
   .append("rect")
@@ -191,8 +209,13 @@ spouseRectangles
     else return false;
   });
 
-// Names
+// Names----------------------------------------------------------------
 var names = svg.append("g").selectAll("text").data(information.descendants());
+var spouse_names = svg
+  .append("g")
+  .selectAll("text")
+  .data(spouse_information.descendants());
+
 names
   .enter()
   .append("text")
@@ -203,13 +226,9 @@ names
     return d.x;
   })
   .attr("y", function (d) {
-    return d.y;
+    return d.y + 35;
   });
 
-var spouse_names = svg
-  .append("g")
-  .selectAll("text")
-  .data(spouse_information.descendants());
 spouse_names
   .enter()
   .append("text")
@@ -220,7 +239,7 @@ spouse_names
     return d.x + img_width * 1.5;
   })
   .attr("y", function (d) {
-    return d.y;
+    return d.y + img_height * 0.7;
   })
   .classed("hide", function (d) {
     if (d.data.name.includes("_spouse")) return true;

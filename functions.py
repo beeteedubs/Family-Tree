@@ -72,7 +72,8 @@ def update(id):
         entry.name = request.form["Your Name"]
         entry.parent = request.form["Father's Name"]
         entry.have_children = request.form["Any Children?"]
-        entry.image = request.form["image"]
+        entry.image = request.form["Image's Name"]
+        entry.spouse = request.form["Spouse's Name"]
 
         try:
             db.session.commit()
