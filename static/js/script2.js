@@ -21,11 +21,40 @@ var spouse_dataStructure = d3
     return d.parent;
   })(spouse_data);
 
-const tree_y = 2 * img_height * (dataStructure.height + 1);
-const tree_x = 11 * 300;
+var queue = [];
+var temp;
+var depth = [];
+queue.push(dataStructure);
+while (queue.length > 0) {
+  temp = queue.shift();
+  depth.push(temp.depth);
+  if (temp.children === undefined) {
+    continue;
+  } else {
+    temp.children.forEach((child) => {
+      queue.push(child);
+    });
+  }
+}
+function mode(array) {
+  if (array.length == 0) return null;
+  var modeMap = {};
+  var maxEl = array[0],
+    maxCount = 1;
+  for (var i = 0; i < array.length; i++) {
+    var el = array[i];
+    if (modeMap[el] == null) modeMap[el] = 1;
+    else modeMap[el]++;
+    if (modeMap[el] > maxCount) {
+      maxEl = el;
+      maxCount = modeMap[el];
+    }
+  }
+  return modeMap[maxEl];
+}
 
-// creates a frame, anything past is cutt off, all elements shifted ↓ & → 50 px
-
+const tree_y = 6 * img_height;
+const tree_x = 2.9 * img_width * mode(depth);
 const svg = d3
   .select("body")
   .append("svg")
@@ -37,13 +66,52 @@ const svg = d3
 var defs = svg.append("defs");
 var spouse_defs = svg.append("defs");
 
+// these 3 worked well before
+// var spouse_spacing = 0.75;
+// var spouseless_spacing = 0.25; //0.007 * img_width;
+// var cousin_spacing = 0.005 * img_width;
+
+var spouse_spacing = 0.15;
+var spouseless_spacing = 0.05; //0.007 * img_width;
+var cousin_spacing = 0.001 * img_width;
 // painting size, careful don't go too far, should not be bigger tha canvas size or svg size
+var spouse_treeStructure = d3
+  .tree()
+  .separation(function (a, b) {
+    if (a.parent == b.parent) {
+      if (b.data.img != "") {
+        return spouse_spacing;
+      } else {
+        return spouseless_spacing; //spacing between spouseless kids, ideal is 0.5
+      }
+    } else {
+      return cousin_spacing;
+    }
+  })
+  .size([tree_x, tree_y]);
+
 var treeStructure = d3
   .tree()
   .separation(function (a, b) {
-    return a.parent == b.parent ? 1.25 : 1.25;
+    console.log("a, b");
+    console.log(a.data);
+    console.log(b.data);
+    if (a.parent == b.parent) {
+      if (b.data.spouse != "") {
+        //there is a spouse
+        return spouse_spacing;
+      } else {
+        return spouseless_spacing; //spacing between spouseless kids, ideal is 0.5
+      }
+    } else {
+      return cousin_spacing;
+    }
+    //return a.parent == b.parent ? 1 : 2;
   })
   .size([tree_x, tree_y]);
+
+var spouse_information = spouse_treeStructure(spouse_dataStructure);
+var information = treeStructure(dataStructure);
 
 svg.call(
   d3
@@ -56,11 +124,6 @@ svg.call(
 function zoomed() {
   svg.attr("transform", d3.event.transform);
 }
-
-// //??? doesn't seem necessary according to prints of descendants and links
-// // But if we dont use it, the code doent work
-var spouse_information = treeStructure(spouse_dataStructure);
-var information = treeStructure(dataStructure);
 
 defs
   .selectAll(".family-image")
@@ -258,3 +321,5 @@ $(document).ready(function () {
       console.log(files[0]);
     });
 });
+
+// export default names;

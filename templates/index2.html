@@ -15,6 +15,7 @@
     var other_data = [];
     var entry_obj;
     {% for entry in entries %}
+    console.log("{{entry.id}}")
     {% if entry.parent == "" %}
     orphans.push({
         name: "{{ entry.name }}",
@@ -75,10 +76,7 @@
     }
 
     entries_js.splice(0, 1)
-    // look through each entry of family tree data
-    // 
-    // 4th: look at data.parent's spouse info, if spouse exists, rename spouse_data entry's parent with that spouse. 
-    // 5th: if data.parent's spouse doesn't exist, rename spouse_data entry's parent with data.parent
+
 
     family_tree_data.forEach((data) => { //adds spouses of ppl in family_tree_data to spouse_data
         var spouse_parent;
@@ -132,26 +130,6 @@
         }
     })
 
-
-
-    // copy family tree data, switch spouse n name
-    // if spouse is blank, then switch name to be spouse's name + "spouse"
-    // replace img w/ by searching in spouse data/s img values
-    // copy family tree data, switch spouse n name
-    // if spouse is blank, then switch name to be spouse's name + "spouse"
-    // replace img w/ by searching in spouse data/s img values
-    // copy family tree data, switch spouse n name
-    // if spouse is blank, then switch name to be spouse's name + "spouse"
-    // replace img w/ by searching in spouse data/s img values
-    // copy family tree data, switch spouse n name
-    // if spouse is blank, then switch name to be spouse's name + "spouse"
-    // replace img w/ by searching in spouse data/s img values
-    // copy family tree data, switch spouse n name
-    // if spouse is blank, then switch name to be spouse's name + "spouse"
-    // replace img w/ by searching in spouse data/s img values
-    // copy family tree data, switch spouse n name
-    // if spouse is blank, then switch name to be spouse's name + "spouse"
-    // replace img w/ by searching in spouse data/s img values
     console.log('entries_js')
     console.log(entries_js)
 
@@ -185,11 +163,6 @@
         <input type="text" name="Father's Name" placeholder="Father's Name" id=parent>
         <input type="text" name="Image's Name" placeholder="Image's Name" class='hide' id=image_name>
         <input type="text" name="Spouse's Name" placeholder="Spouse's Name" id=spouse>
-        <select name="Any Children?" placeholder="Any children?">
-            <option disabled selected value="">Any children?</option>
-            <option selected='selected' value="True">Yes, I have children</option>
-            <option value="False">No, I have no children</option>
-        </select>
         <div class="form-group">
             <label>Select image</label>
             <div class="custom-file">
@@ -206,12 +179,11 @@
     {% else %}
     <table>
         <tr>
-            <th>ID</th>
+            <th> ID </th>
             <th> Your Name</th>
             <th> Your Father's Name</th>
             <th> Image's Name</th>
             <th> Spouse's Name </th>
-            <th> Any Children?</th>
             <th> Actions</th>
         </tr>
         {% for entry in entries %}
@@ -221,12 +193,12 @@
             <td>{{ entry.parent }}</td>
             <td>{{ entry.image }}</td>
             <td>{{ entry.spouse }}</td>
-            <td>{{ entry.have_children }}</td>
             <td>
                 <a href="/delete/{{entry.id}}">Delete</a>
                 <br>
                 <a href="/update/{{entry.id}}">Update</a>
             </td>
+
         </tr>
         {% endfor %}
     </table>
