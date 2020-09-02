@@ -1,7 +1,16 @@
 import os
-from flask import Flask, render_template, url_for, request, redirect, json, flash
+from flask import (
+    Flask,
+    render_template,
+    url_for,
+    request,
+    redirect,
+    json,
+    flash,
+)
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+
 from migrate import *
 from auth import *
 
@@ -17,10 +26,11 @@ from flask_login import (
 
 app = Flask(__name__)
 db = SQLAlchemy(app)
+db.init_app(app)
 
-app.config[
-    "SQLALCHEMY_DATABASE_URI"
-] = "postgresql://postgres:test@localhost/test"  # "sqlite:///with_spouse.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:test@localhost/test"
+# app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///with_spouse.db"
+
 app.config["SECRET_KEY"] = "greensquared"
 
 
@@ -57,12 +67,13 @@ def index():
         if request.files:
             image = request.files["image"]
             image.save(os.path.join(app.config["IMAGE_UPLOADS"], image.filename))
-
-        db.session.add(entry)
-        db.session.commit()
-        return redirect("/")
-
-        # return "don goofed"
+        try:
+            db.session.add(entry)
+            db.session.commit()
+            db.session.close()
+            return redirect("/")
+        except:
+            return "don goofed"
     else:
         entries = family_input.query.order_by(family_input.id).all()
         return render_template("index2.html", entries=entries)
@@ -70,27 +81,53 @@ def index():
 
 @app.route("/delete/<int:id>")
 def delete(id):
-    entry_to_delete = family_input.query.get_or_404(id)
+    entry = family_input.query.get_or_404(id)
+    print(
+        "\nentry:\n",
+        entry.id,
+        entry.name,
+        entry.parent,
+        entry.image,
+        entry.spouse,
+        entry.userid,
+        type(entry.parent),
+        type(entry.userid),
+        entry,
+        "\n\n\n",
+    )
+    db.session.delete(entry)
+    db.session.commit()
+    db.session.close()
+    return redirect("/")
 
-    try:
-        db.session.delete(entry_to_delete)
-        db.session.commit()
-        return redirect("/")
-    except:
-        return "There was a problem deleting that task"
+    return "There was a problem deleting that task"
+    # try:
+    #     db.session.delete(entry)
+    #     db.session.commit()
+    #     return redirect("/")
+    # except:
+    #     return "There was a problem deleting that task"
 
 
 @app.route("/update/<int:id>", methods=["GET", "POST"])
 def update(id):
     entry = family_input.query.get_or_404(id)
-
+    print(entry.id, entry.name, entry.parent, entry.image, entry.spouse, "\n\n\n\n")
     if request.method == "POST":
-        entry.name = request.form["Your Name"]
+        entry.name = "JNJ"  # request.form["Your Name"]
         entry.parent = request.form["Father's Name"]
         entry.image = request.form["Image's Name"]
         entry.spouse = request.form["Spouse's Name"]
 
         try:
+            print(
+                entry.id,
+                entry.name,
+                entry.parent,
+                entry.image,
+                entry.spouse,
+                "\n\n\n\n",
+            )
             db.session.commit()
             return redirect("/")  # just return http status code n some json response
             # then through fetch API, make a request to this endpoint w/ the ID

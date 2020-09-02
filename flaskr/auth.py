@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "secretkey"
 db = SQLAlchemy(app)
+db.init_app(app)
 auth = Blueprint("auth", __name__)
 
 

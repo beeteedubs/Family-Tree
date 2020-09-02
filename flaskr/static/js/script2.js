@@ -93,9 +93,9 @@ var spouse_treeStructure = d3
 var treeStructure = d3
   .tree()
   .separation(function (a, b) {
-    console.log("a, b");
-    console.log(a.data);
-    console.log(b.data);
+    // console.log("a, b");
+    // console.log(a.data);
+    // console.log(b.data);
     if (a.parent == b.parent) {
       if (b.data.spouse != "") {
         //there is a spouse

@@ -1,14 +1,16 @@
 <!-- Displays updated page, kinda confusing to me atm -->
 
 {% extends 'base2.html' %}
+{% block javascript %}
 
+{% endblock %}
 {% block head %}
-<title>Task Master</title>
+<title>Updating</title>
 {% endblock %}
 
 {% block body %}
 <script type="text/javascript">
-    function alertFilename() {
+    function alertFilename() {// gets old image name
         var thefile = document.getElementById('image');
         thefile = thefile.value.replace(/.*[\/\\]/, '');
         var input = document.getElementById('image_name');
@@ -17,8 +19,7 @@
 </script>
 
 <div class="content">
-    <h1 style="text-align: center">Update Task</h1>
-
+    <h1 style="text-align: center">Update Family</h1>
     <div class='form'>
         <form action="/update/{{entry.id}}" method="POST" enctype="multipart/form-data">
             <input type="text" name='Your Name' placeholder="Your Name" value='{{entry.name}}' id=name required>
@@ -26,11 +27,6 @@
             <input type="text" name="Image's Name" placeholder="Image's Name" value='{{entry.image}}' class='hide'
                 id=image_name>
             <input type="text" name="Spouse's Name" placeholder="Spouse Name" value='{{entry.spouse}}' id=spouse>
-            <select name="Any Children?" placeholder="Any children?">
-                <option disabled selected value="">Any children?</option>
-                <option selected='selected' value="True">Yes, I have children</option>
-                <option value="False">No, I have no children</option>
-            </select>
             <div class="form-group">
                 <label></label>
                 <div class="custom-file">
