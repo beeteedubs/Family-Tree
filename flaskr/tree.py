@@ -11,8 +11,8 @@ from flask import (
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
-from migrate import *
-from auth import *
+# from migrate import *
+# from auth import *
 
 from flask_login import (
     LoginManager,

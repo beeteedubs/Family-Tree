@@ -17,12 +17,13 @@ manager.add_command("db", MigrateCommand)
 
 class family_input(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(225), nullable=False, default="Sasha")
-    image = db.Column(db.String(225), nullable=False, default="Grandma.jpg")
-    parent = db.Column(db.String(225))
+    name = db.Column(db.String(225), nullable=False)
+    image = db.Column(db.String(225), default="Grandma.jpg")
+    father = db.Column(db.String(225))
+    mother = db.Column(db.String(225))
     spouse = db.Column(db.String(225))
+    gender = db.Column(db.Boolean)
     userid = db.Column(db.Integer, db.ForeignKey("users.id"))
-
 
 class users(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
