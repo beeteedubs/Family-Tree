@@ -1,6 +1,6 @@
 <!-- Displays updated page, kinda confusing to me atm -->
 
-{% extends 'base2.html' %}
+{% extends 'base.html' %}
 {% block javascript %}
 
 {% endblock %}
@@ -8,7 +8,7 @@
 <title>Updating</title>
 {% endblock %}
 
-{% block body %}
+{% block content %}
 <script type="text/javascript">
     function alertFilename() {// gets old image name
         var thefile = document.getElementById('image');
@@ -24,13 +24,13 @@
         <form action="/update/{{entry.id}}" method="POST" enctype="multipart/form-data">
             <input type="text" name='Your Name' placeholder="Your Name" value='{{entry.name}}' id=name required>
             <input type="text" name="Father's Name" placeholder="Father's Name" value='{{entry.father}}' id=father>
-            <input type="text" name="Mother's Name" placeholder="Mother's Name" value='' id=mother>
+            <input type="text" name="Mother's Name" placeholder="Mother's Name" value='{{entry.mother}}' id=mother>
             <input type="text" name="Spouse's Name" placeholder="Spouse Name" value='{{entry.spouse}}' id=spouse>
-            <select name="Gender" placeholder="???">
+            <!-- <select name="Gender" placeholder="???">
                 <option disabled selected value="{{entry.gender}}">Gender</option>
                 <option selected="selected" value=True>Male</option>
                 <option value=False>Female</option>
-            </select>
+            </select> -->
             <div class="form-group">
                 <label></label>
                 <div class="custom-file">
@@ -40,7 +40,7 @@
             </div>
 
             <input type='submit' name='Add Task'>
-                        <input type="text" name="Image's Name" placeholder="Image's Name" value='{{entry.image}}' class='hide'
+            <input type="text" name="Image's Name" placeholder="Image's Name" value='{{entry.image}}' class='hide'
                 id=image_name>
         </form>
     </div>

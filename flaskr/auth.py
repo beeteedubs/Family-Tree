@@ -1,27 +1,28 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, Flask
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required
-from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
-app.config["SECRET_KEY"] = "secretkey"
-db = SQLAlchemy(app)
-db.init_app(app)
-auth = Blueprint("auth", __name__)
+from . import db
+
+auth = Blueprint("auth", __name__, static_folder="static", template_folder="templates")
 
 
+@auth.route("/")
 @auth.route("/login")
 def login():
     return render_template("login.html")
 
 
+from .models import users
+
+
 @auth.route("/login", methods=["POST"])
 def login_post():
-    email = request.form.get("email")
+    username = request.form.get("username")
     password = request.form.get("password")
     remember = True if request.form.get("remember") else False
 
-    user = user.query.filter_by(email=email).first()
+    user = users.query.filter_by(username=username).first()
 
     if not user and not check_password_hash(user.password, password):
         flash("Please check your login details and try again.")
@@ -29,7 +30,9 @@ def login_post():
 
     login_user(user, remember=remember)
 
-    return redirect(url_for("main.profile"))
+    return redirect(
+        url_for("main.index")
+    )  # should this be a render+template? oh wait nvm
 
 
 @auth.route("/signup")
@@ -39,20 +42,17 @@ def signup():
 
 @auth.route("/signup", methods=["POST"])
 def signup_post():
-    email = request.form.get("email")
-    name = request.form.get("name")
+    username = request.form.get("username")
     password = request.form.get("password")
 
-    user = User.query.filter_by(email=email).first()
+    user = users.query.filter_by(username=username).first()
 
     if user:
-        flash("Email address already exists.")
+        flash("username already exists.")
         return redirect(url_for("auth.signup"))
 
-    new_user = User(
-        email=email,
-        name=name,
-        password=generate_password_hash(password, method="sha256"),
+    new_user = users(
+        username=username, password=generate_password_hash(password, method="sha256")
     )
 
     db.session.add(new_user)
