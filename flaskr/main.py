@@ -27,7 +27,7 @@ from . import db
 main = Blueprint("main", __name__)
 
 
-@main.route("/tree", methods=["POST", "GET"])
+@main.route("/tree", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
         name = request.form.get("Your Name")
@@ -43,7 +43,7 @@ def index():
 
         if request.files:
             image = request.files["image"]
-            image.save(os.path.join("flaskr/static/images", image.filename))
+            image.save(os.path.join("flaskr/static/images/", image.filename))
         try:
             db.session.add(entry)
             db.session.commit()
