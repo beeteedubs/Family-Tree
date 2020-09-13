@@ -10,6 +10,7 @@ def create_app():
 
     app.config["SECRET_KEY"] = "thisismysecretkeydonotstealit"
     app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:test@localhost/test"
+    # app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///with_spouse.db"
     app.config["IMAGE_UPLOADS"] = "static\images"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 

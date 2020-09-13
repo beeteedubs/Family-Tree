@@ -1,14 +1,13 @@
 import os
-
 from flask import (
     Flask,
     render_template,
-    Blueprint,
     url_for,
     request,
     redirect,
     json,
     flash,
+    Blueprint,
 )
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import (
@@ -25,11 +24,10 @@ from . import db
 
 
 # @app.route("/display/<string:pivot>") Shoumyo's idea for onclick
-
 main = Blueprint("main", __name__)
 
 
-@main.route("/tree", methods=["GET", "POST"])
+@main.route("/tree", methods=["POST", "GET"])
 def index():
     if request.method == "POST":
         name = request.form.get("Your Name")
@@ -42,31 +40,29 @@ def index():
         entry = family_input2(
             name=name, father=father, mother=mother, image=image, spouse=spouse
         )
+
         if request.files:
             image = request.files["image"]
-            image.save(os.path.join("flaskr\static\images", image.filename))
-
-        db.session.add(entry)
-        db.session.commit()
-        db.session.close()
-        return redirect("/tree")
-
-        return "don goofed"
+            image.save(os.path.join("flaskr/static/images", image.filename))
+        try:
+            db.session.add(entry)
+            db.session.commit()
+            db.session.close()
+            return redirect("/tree")
+        except:
+            return "don goofed"
     else:
         entries = family_input2.query.order_by(family_input2.id).all()
-
-        return render_template("index2.html", entries=entries)
+        return render_template("index.html", entries=entries)
 
 
 @main.route("/delete/<int:id>")
 def delete(id):
     entry = family_input2.query.get_or_404(id)
-    try:
-        db.session.delete(entry)
-        db.session.commit()
-        return redirect("/tree")
-    except:
-        return "There was a problem deleting that task"
+    db.session.delete(entry)
+    db.session.commit()
+    db.session.close()
+    return redirect("/tree")
 
 
 @main.route("/update/<int:id>", methods=["GET", "POST"])
@@ -78,10 +74,9 @@ def update(id):
         entry.mother = request.form["Mother's Name"]
         entry.image = request.form["Image's Name"]
         entry.spouse = request.form["Spouse's Name"]
-
         db.session.commit()
         return redirect("/tree")
-
-        return "There was an issue updating your task"
-    else:
-        return render_template("update2.html", entry=entry)
+        # just return http status code n some json response
+        # then through fetch API, make a request to this endpoint w/ the ID
+    else:  # would not render anything, instead when post, commit
+        return render_template("update.html", entry=entry)

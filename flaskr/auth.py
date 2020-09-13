@@ -20,6 +20,7 @@ from .models import users
 def login_post():
     username = request.form.get("username")
     password = request.form.get("password")
+
     remember = True if request.form.get("remember") else False
 
     user = users.query.filter_by(username=username).first()
@@ -30,9 +31,13 @@ def login_post():
 
     login_user(user, remember=remember)  # ?
 
+<<<<<<< HEAD
     return redirect(
         url_for("main.index")
     )  # should this be a render+template? oh wait nvm
+=======
+    return redirect(url_for("main.index"))
+>>>>>>> tmp
 
 
 @auth.route("/signup")
@@ -54,7 +59,6 @@ def signup_post():
     new_user = users(
         username=username, password=generate_password_hash(password, method="sha256")
     )
-
     db.session.add(new_user)
     db.session.commit()
 
@@ -65,4 +69,4 @@ def signup_post():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for("main.index"))
+    return redirect("/")

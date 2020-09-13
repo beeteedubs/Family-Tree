@@ -6,15 +6,6 @@ from flask_migrate import Migrate, MigrateCommand
 
 from . import db
 
-# app = Flask(__name__)
-# app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:test@localhost/test"
-# db = SQLAlchemy(app)
-
-# migrate = Migrate(app, db)
-# manager = Manager(app)
-
-# manager.add_command("db", MigrateCommand)
-
 
 class family_input2(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -30,7 +21,3 @@ class users(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(225), unique=True)
     password = db.Column(db.String(225), unique=True)
-
-
-# if __name__ == "__main__":
-#     manager.run()
