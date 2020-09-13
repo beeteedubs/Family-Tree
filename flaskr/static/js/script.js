@@ -177,10 +177,6 @@ connections
   .attr("stroke-opacity", 1)
   .attr("stroke-width", 2)
   .attr("d", function (d) {
-<<<<<<< HEAD:flaskr/static/js/script2.js
-    if (d.source.data.spouse != "") {
-      // has spouse!
-=======
     if (d.source.data.spouse == "") {
       return (
         "M " +
@@ -195,53 +191,28 @@ connections
         d.target.y
       );
     } else {
->>>>>>> master:static/js/script2.js
       return (
         "M " +
         (d.source.x + img_width * 0.75) +
         "," +
         d.source.y +
         " v " +
-<<<<<<< HEAD:flaskr/static/js/script2.js
-        img_height +
-=======
         (img_height - 10) +
->>>>>>> master:static/js/script2.js
         " H " +
         d.target.x + //- img_height / 2 +
         " V" +
         d.target.y
       );
     }
-<<<<<<< HEAD:flaskr/static/js/script2.js
-    return (
-      "M " +
-      d.source.x +
-      "," +
-      d.source.y +
-      " v " +
-      (img_height - 10) +
-      " H " +
-      d.target.x + //- img_height / 2 +
-      " V" +
-      d.target.y
-    );
-=======
->>>>>>> master:static/js/script2.js
   });
 
 var spouse_lines = svg // just the horizontal line
   .append("g")
-<<<<<<< HEAD:flaskr/static/js/script2.js
   .selectAll("path")
-=======
-  .selectAll("circle")
->>>>>>> master:static/js/script2.js
   .data(spouse_information.descendants());
 
 spouse_lines
   .enter()
-<<<<<<< HEAD:flaskr/static/js/script2.js
   .append("path")
   .attr("fill", "none")
   .attr("stroke", "black")
@@ -249,14 +220,6 @@ spouse_lines
   .attr("stroke-width", 2)
   .attr("d", function (d) {
     return "M " + d.x + "," + d.y + "h" + img_width;
-=======
-  .append("circle")
-  .attr("x", function (d) {
-    return d.x;
-  })
-  .attr("y", function (d) {
-    return d.y;
->>>>>>> master:static/js/script2.js
   })
   .classed("hide", function (d) {
     if (d.data.name.includes("_spouse")) return true;
