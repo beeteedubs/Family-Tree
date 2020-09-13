@@ -31,13 +31,7 @@ def login_post():
 
     login_user(user, remember=remember)  # ?
 
-<<<<<<< HEAD
-    return redirect(
-        url_for("main.index")
-    )  # should this be a render+template? oh wait nvm
-=======
     return redirect(url_for("main.index"))
->>>>>>> tmp
 
 
 @auth.route("/signup")
