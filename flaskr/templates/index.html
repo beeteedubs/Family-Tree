@@ -1,0 +1,132 @@
+{% extends 'base.html' %} {% block javascript %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+  var orphans = [];
+  var dummy = [];
+  var entries_js = [];
+  var family_tree_data = [];
+  var spouse_data = [];
+  var other_data = [];
+  var entry_obj;
+
+  {% for entry in entries %}
+  {% if entry.father == "" and entry.mother == "" %}
+  orphans.push({
+    name: "{{ entry.name }}",
+    father: "{{ entry.father }}",
+    mother: "{{ entry.mother }}",
+    image: "{{ entry.image }}",
+    spouse: "{{ entry.spouse}}",
+  })
+  {% endif %}
+
+  entries_js.push({
+    name: "{{ entry.name }}",
+    father: "{{ entry.father }}",
+    mother: "{{ entry.mother }}",
+    image: "{{ entry.image }}",
+    spouse: "{{ entry.spouse}}",
+  })
+  {% endfor %}
+</script>
+
+<script type="text/javascript" src="../static/js/data.js"></script>
+{% endblock %} {% block head %}
+<h1 style="text-align: center">Fam Tree Data</h1>
+{% endblock %} {% block content %} {% endblock %} {% block body %}
+<script src="../static/js/script2.js"></script>
+<script type="text/javascript">
+  function alertFilename() {
+    var thefile = document.getElementById("image");
+    thefile = thefile.value.replace(/.*[\/\\]/, "");
+    var input = document.getElementById("image_name");
+    input.value = thefile;
+  }
+</script>
+<div class="form">
+  <form action="/" method="POST" enctype="multipart/form-data">
+    <input
+      type="text"
+      name="Your Name"
+      placeholder="Your Name"
+      id="name"
+      required
+    />
+    <input
+      type="text"
+      name="Father's Name"
+      placeholder="Father's Name"
+      id="father"
+    />
+    <input
+      type="text"
+      name="Mother's Name"
+      placeholder="Mother's Name"
+      id="mother"
+    />
+    <input
+      type="text"
+      name="Image's Name"
+      placeholder="Image's Name"
+      class="hide"
+      id="image_name"
+    />
+    <input
+      type="text"
+      name="Spouse's Name"
+      placeholder="Spouse's Name"
+      id="spouse"
+    />
+    <div class="form-group">
+      <label>Select image</label>
+      <div class="custom-file">
+        <input
+          type="file"
+          class="custom-file-input"
+          name="image"
+          onchange="alertFilename()"
+          id="image"
+        />
+        <label class="custom-file-label" for="image">Select image...</label>
+      </div>
+    </div>
+    <input type="submit" name="Add Task" />
+  </form>
+</div>
+<div class="content">
+  {% if entries|length < 1 %}
+  <h4 style="text-align: center">
+    There are no family entries. Create one below!
+  </h4>
+  {% else %}
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Your Name</th>
+      <th>Your Father's Name</th>
+      <th>Your Mother's Name</th>
+      <th>Image's Name</th>
+      <th>Spouse's Name</th>
+      <th>Actions</th>
+    </tr>
+    {% for entry in entries %}
+    <tr>
+      <td>{{ entry.id }}</td>
+      <td>{{ entry.name }}</td>
+      <td>{{ entry.father }}</td>
+      <td>{{ entry.mother }}</td>
+      <td>{{ entry.image }}</td>
+      <td>{{ entry.spouse }}</td>
+      <td>
+        <a href="/delete/{{entry.id}}">Delete</a>
+        <br />
+        <a href="/update/{{entry.id}}">Update</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% endif %}
+</div>
+{% endblock %}

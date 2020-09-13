@@ -1,4 +1,4 @@
-{% extends 'base2.html' %} {% block javascript %}
+{% extends 'base.html' %} {% block javascript %}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -12,36 +12,34 @@
   var entry_obj;
 
   {% for entry in entries %}
-  {% if entry.father=="" and entry.mother == "" %}
+  {% if entry.father == "" and entry.mother == "" %}
   orphans.push({
-      name: "{{ entry.name }}",
-      father: "{{ entry.father }}",
-      mother: "{{ entry.mother }}",
-      image: "{{ entry.image }}",
-      spouse: "{{ entry.spouse}}",
-      gender: "{{ entry.gender}}"
+    name: "{{ entry.name }}",
+    father: "{{ entry.father }}",
+    mother: "{{ entry.mother }}",
+    image: "{{ entry.image }}",
+    spouse: "{{ entry.spouse}}",
   })
   {% endif %}
 
   entries_js.push({
-      name: "{{ entry.name }}",
-      father: "{{ entry.father }}",
-      mother: "{{ entry.mother }}",
-      image: "{{ entry.image }}",
-      spouse: "{{ entry.spouse}}",
-      gender: "{{ entry.gender}}"
+    name: "{{ entry.name }}",
+    father: "{{ entry.father }}",
+    mother: "{{ entry.mother }}",
+    image: "{{ entry.image }}",
+    spouse: "{{ entry.spouse}}",
   })
   {% endfor %}
 
   function arrayUnique(array) { //
-      var a = array.concat();
-      for (var i = 0; i < a.length; ++i) {
-          for (var j = i + 1; j < a.length; ++j) {
-              if (a[i] === a[j])
-                  a.splice(j--, 1);
-          }
+    var a = array.concat();
+    for (var i = 0; i < a.length; ++i) {
+      for (var j = i + 1; j < a.length; ++j) {
+        if (a[i] === a[j])
+          a.splice(j--, 1);
       }
-      return a;
+    }
+    return a;
   }
 
   var x = 0
@@ -51,85 +49,85 @@
 
 
   while ((dummy.length != family_tree_data.length)) {// for loop which'll keep going until family_tree_Data has no more changes.
-      // dummy holds prev instance of family_tree_data
-      dummy = arrayUnique(family_tree_data.concat(dummy)); // At the start of each loop, we set family_tree_data = dummy_list
-      to_be_added = []
-      entries_js.forEach((entry) => {
-          family_tree_data.forEach((data) => {
-              // look for son in entries_js AND not already in FTD
-              if (data.name == entry.father  && !family_tree_data.includes(entry)) { // if father is in family_tree_data, add entry with father set as parent
-                  entry_obj = { name: entry.name, parent: entry.father, image: entry.image, spouse: entry.spouse}
-                  to_be_added.push(entry_obj);
-              }
-              else if (data.name == entry.mother && !family_tree_data.includes(entry)) { // if mother is in family_tree_data, add entry with mother set as parent
-                entry_obj = { name: entry.name, parent: entry.mother, image: entry.image, spouse: entry.spouse}
-                to_be_added.push(entry_obj);
-              }
-              console.log('innermost loop')
-          })
+    // dummy holds prev instance of family_tree_data
+    dummy = arrayUnique(family_tree_data.concat(dummy)); // At the start of each loop, we set family_tree_data = dummy_list
+    to_be_added = []
+    entries_js.forEach((entry) => {
+      family_tree_data.forEach((data) => {
+        // look for son in entries_js AND not already in FTD
+        if (data.name == entry.father && !family_tree_data.includes(entry)) { // if father is in family_tree_data, add entry with father set as parent
+          entry_obj = { name: entry.name, parent: entry.father, image: entry.image, spouse: entry.spouse }
+          to_be_added.push(entry_obj);
+        }
+        else if (data.name == entry.mother && !family_tree_data.includes(entry)) { // if mother is in family_tree_data, add entry with mother set as parent
+          entry_obj = { name: entry.name, parent: entry.mother, image: entry.image, spouse: entry.spouse }
+          to_be_added.push(entry_obj);
+        }
+        console.log('innermost loop')
       })
-      to_be_added.forEach((element) => {//remove in entries_js and add to FTD
-          family_tree_data.push(element);
-          index = entries_js.indexOf(element);
-          if (index > -1) {
-              entries_js.splice(index, 1);
-          }
-      })
+    })
+    to_be_added.forEach((element) => {//remove in entries_js and add to FTD
+      family_tree_data.push(element);
+      index = entries_js.indexOf(element);
+      if (index > -1) {
+        entries_js.splice(index, 1);
+      }
+    })
 
   }
 
   entries_js.splice(0, 1)
 
   family_tree_data.forEach((data) => { //adds spouses of ppl in family_tree_data to spouse_data
-      var spouse_parent;
-      if (data.spouse == "") {//spousless
-          if (data.parent != "") {//non-root node only
-              family_tree_data.forEach((parent) => {
-                  if (parent.name == data.parent) {//if found parent of current spouseless data
-                      if (parent.spouse == "") { // if parent has no spouse
-                          spouse_parent = parent.name; // set imaginary spouse's parent to imaginary parent.name_spouse
-                          entry_obj = { name: data.name + '_spouse',  parent: spouse_parent + '_spouse', img: '' }//
-                          spouse_data.push(entry_obj);
-                      } else {//found spouseFUL father, reassign father to be your spouse's father's spouse
-                          spouse_parent = parent.spouse;// set imagianry spouse's parent to parent.spouse
-                          entry_obj = { name: data.name + '_spouse', father: spouse_parent, img: '' }//
-                          spouse_data.push(entry_obj);
-                      }
-                  }
-
-              })
-          }
-          else {//for root node
-              entry_obj = { name: data.name + '_spouse', parent: "", img: '' }
+    var spouse_parent;
+    if (data.spouse == "") {//spousless
+      if (data.parent != "") {//non-root node only
+        family_tree_data.forEach((parent) => {
+          if (parent.name == data.parent) {//if found parent of current spouseless data
+            if (parent.spouse == "") { // if parent has no spouse
+              spouse_parent = parent.name; // set imaginary spouse's parent to imaginary parent.name_spouse
+              entry_obj = { name: data.name + '_spouse', parent: spouse_parent + '_spouse', img: '' }//
               spouse_data.push(entry_obj);
+            } else {//found spouseFUL father, reassign father to be your spouse's father's spouse
+              spouse_parent = parent.spouse;// set imagianry spouse's parent to parent.spouse
+              entry_obj = { name: data.name + '_spouse', father: spouse_parent, img: '' }//
+              spouse_data.push(entry_obj);
+            }
           }
-      } else {//gots a spouse, so look through spouse list
-          entries_js.forEach((entry) => {
-              if (entry.name == data.spouse) {//found spouse
-                  if (data.parent != "") {//for non-root nodes
-                      family_tree_data.forEach((parent) => {//look through family tree data again
-                          if (parent.name == data.parent) {
-                              if (parent.spouse != "") { // if data's parent has a spouse
-                                  spouse_parent = parent.spouse
-                                  entry_obj = { name: data.spouse, parent: spouse_parent, img: entry.img }
-                              }
-                              else {
-                                  spouse_parent = parent.name;
-                                  entry_obj = { name: data.spouse, parent: spouse_parent + '_spouse', img: entry.img }
-                              }
-                          }
-                          console.log('innermost spouse data loo')
-                      })
-                    //   spouse_data.push(entry_obj); //pushing spouse
-                  }
-                  else {
-                      entry_obj = { name: data.spouse, parent: "", img: entry.img }
-                      // spouse_data.push(entry_obj); //pushing spouse
-                  }
-              }
-              spouse_data.push(entry_obj); //pushing spouse
-          })
+
+        })
       }
+      else {//for root node
+        entry_obj = { name: data.name + '_spouse', parent: "", img: '' }
+        spouse_data.push(entry_obj);
+      }
+    } else {//gots a spouse, so look through spouse list
+      entries_js.forEach((entry) => {
+        if (entry.name == data.spouse) {//found spouse
+          if (data.parent != "") {//for non-root nodes
+            family_tree_data.forEach((parent) => {//look through family tree data again
+              if (parent.name == data.parent) {
+                if (parent.spouse != "") { // if data's parent has a spouse
+                  spouse_parent = parent.spouse
+                  entry_obj = { name: data.spouse, parent: spouse_parent, img: entry.img }
+                }
+                else {
+                  spouse_parent = parent.name;
+                  entry_obj = { name: data.spouse, parent: spouse_parent + '_spouse', img: entry.img }
+                }
+              }
+              console.log('innermost spouse data loo')
+            })
+            //   spouse_data.push(entry_obj); //pushing spouse
+          }
+          else {
+            entry_obj = { name: data.spouse, parent: "", img: entry.img }
+            // spouse_data.push(entry_obj); //pushing spouse
+          }
+        }
+        spouse_data.push(entry_obj); //pushing spouse
+      })
+    }
   })
 </script>
 {% endblock %} {% block head %}
@@ -178,11 +176,6 @@
       placeholder="Spouse's Name"
       id="spouse"
     />
-    <select name="Gender" placeholder="???">
-      <option disabled selected value="">Gender</option>
-      <option selected="selected" value="True">Male</option>
-      <option value="False">Female</option>
-    </select>
     <div class="form-group">
       <label>Select image</label>
       <div class="custom-file">
@@ -209,7 +202,6 @@
     <tr>
       <th>ID</th>
       <th>Your Name</th>
-      <th>Gender</th>
       <th>Your Father's Name</th>
       <th>Your Mother's Name</th>
       <th>Image's Name</th>
@@ -220,7 +212,6 @@
     <tr>
       <td>{{ entry.id }}</td>
       <td>{{ entry.name }}</td>
-      <td>{{ entry.gender }}</td>
       <td>{{ entry.father }}</td>
       <td>{{ entry.mother }}</td>
       <td>{{ entry.image }}</td>
