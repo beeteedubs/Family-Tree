@@ -79,7 +79,7 @@ var spouse_treeStructure = d3
   .tree()
   .separation(function (a, b) {
     if (a.parent == b.parent) {
-      if (b.data.img != "") {
+      if (b.data.image != "") {
         return spouse_spacing;
       } else {
         return spouseless_spacing; //spacing between spouseless kids, ideal is 0.5
@@ -130,10 +130,11 @@ defs
   .data(family_tree_data)
   .enter()
   .append("pattern")
-  .attr("class", "family-image")
   .attr("id", function (d) {
-    return d.img;
+    return d.image;
   })
+  .attr("class", "family-image")
+
   .attr("height", "100%")
   .attr("width", "100%")
   .attr("patternContentUnits", "objectBoundingBox")
@@ -143,7 +144,7 @@ defs
   .attr("preserveAspectRatio", "none")
   .attr("xmlns:xlink", "http://www.w3.org/1999/xlink")
   .attr("xlink:href", function (d) {
-    return "/static/images/" + d.img;
+    return "../static/images/" + d.image;
   });
 
 spouse_defs
@@ -153,7 +154,7 @@ spouse_defs
   .append("pattern")
   .attr("class", "family-image")
   .attr("id", function (d) {
-    return d.img;
+    return d.image;
   })
   .attr("height", "100%")
   .attr("width", "100%")
@@ -164,7 +165,7 @@ spouse_defs
   .attr("preserveAspectRatio", "none")
   .attr("xmlns:xlink", "http://www.w3.org/1999/xlink")
   .attr("xlink:href", function (d) {
-    return "/static/images/" + d.img;
+    return "../static/images/" + d.image;
   });
 
 var connections = svg.append("g").selectAll("path").data(information.links());
@@ -249,7 +250,7 @@ rectangles
   .attr("width", img_width)
   .attr("class", "rect")
   .attr("fill", function (d) {
-    return "url(#" + d.data.img + ")";
+    return "url(#" + d.data.image + ")";
   });
 
 spouseRectangles
@@ -265,7 +266,7 @@ spouseRectangles
   .attr("width", img_width)
   .attr("class", "rect")
   .attr("fill", function (d) {
-    return "url(#" + d.data.img + ")";
+    return "url(#" + d.data.image + ")";
   })
   .classed("hide", function (d) {
     if (d.data.name.includes("_spouse")) return true;
