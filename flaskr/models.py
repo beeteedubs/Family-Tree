@@ -14,10 +14,11 @@ class family_input2(db.Model):
     father = db.Column(db.String(225))
     mother = db.Column(db.String(225))
     spouse = db.Column(db.String(225))
-    userid = db.Column(db.Integer, db.ForeignKey("users.id"))
+    userid = db.Column(db.Integer, db.ForeignKey("user.id"))
 
 
 class users(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.relationship("family_input2", backref="user")
+    # id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(225), unique=True)
     password = db.Column(db.String(225), unique=True)

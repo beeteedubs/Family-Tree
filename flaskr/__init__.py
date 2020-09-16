@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
 db = SQLAlchemy()
-
+user_id = 0
 
 def create_app():
     app = Flask(__name__)

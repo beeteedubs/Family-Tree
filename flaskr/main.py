@@ -20,7 +20,7 @@ from flask_login import (
 )
 
 from .models import family_input2, users
-from . import db
+from . import db, user_id
 
 
 # @app.route("/display/<string:pivot>") Shoumyo's idea for onclick
@@ -35,10 +35,16 @@ def index():
         mother = request.form.get("Mother's Name")
         image = request.form.get("Image's Name")
         spouse = request.form.get("Spouse's Name")
+
         # pivot = request.form.get(pivot)
 
         entry = family_input2(
-            name=name, father=father, mother=mother, image=image, spouse=spouse
+            name=name,
+            father=father,
+            mother=mother,
+            image=image,
+            spouse=spouse,
+            userid=user_id,
         )
 
         if request.files:
