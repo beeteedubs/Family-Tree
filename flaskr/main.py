@@ -20,7 +20,7 @@ from flask_login import (
 )
 
 from .models import family_input2, users
-from . import db, user_id
+from . import db
 
 
 # @app.route("/display/<string:pivot>") Shoumyo's idea for onclick
@@ -44,7 +44,7 @@ def index():
             mother=mother,
             image=image,
             spouse=spouse,
-            userid=user_id,
+            userid=current_user.id,
         )
 
         if request.files:
@@ -59,6 +59,7 @@ def index():
             return "don goofed"
     else:
         entries = family_input2.query.order_by(family_input2.id).all()
+        # entries = family_input2.query.filter_by(userid=current_user.id).all()
         return render_template("index.html", entries=entries)
 
 
