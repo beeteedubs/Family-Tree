@@ -1,6 +1,7 @@
 const img_height = 50;
 const img_width = 100;
 const canvas_inf = 2;
+let pivot = "";
 
 // stratifies data, provides x and y coord
 var dataStructure = d3
@@ -63,9 +64,6 @@ const svg = d3
   .append("g")
   .attr("transform", "translate(100,100)");
 
-var defs = svg.append("defs");
-var spouse_defs = svg.append("defs");
-
 // these 3 worked well before
 // var spouse_spacing = 0.75;
 // var spouseless_spacing = 0.25; //0.007 * img_width;
@@ -125,6 +123,25 @@ function zoomed() {
   svg.attr("transform", d3.event.transform);
 }
 
+var defs = svg.append("defs");
+var spouse_defs = svg.append("defs");
+var add_def = svg.append("defs");
+
+add_def
+  .enter()
+  .append("pattern")
+  .attr("id", "plus.png")
+  .attr("class", "family-image")
+  .attr("height", "100%")
+  .attr("width", "100%")
+  .attr("patternContentUnits", "objectBoundingBox")
+  .append("image")
+  .attr("height", 1)
+  .attr("width", 1)
+  .attr("preserveAspectRatio", "none")
+  .attr("xmlns:xlink", "http://www.w3.org/1999/xlink")
+  .attr("xlink:href", "../static/images/plus.png");
+
 defs
   .selectAll(".family-image")
   .data(family_tree_data)
@@ -134,7 +151,6 @@ defs
     return d.image;
   })
   .attr("class", "family-image")
-
   .attr("height", "100%")
   .attr("width", "100%")
   .attr("patternContentUnits", "objectBoundingBox")
@@ -249,6 +265,11 @@ rectangles
   .attr("height", img_height)
   .attr("width", img_width)
   .attr("class", "rect")
+  .on("mouseover", function (d) {
+    pivot = d.data.name;
+    console.log(pivot);
+    return pivot;
+  })
   .attr("fill", function (d) {
     return "url(#" + d.data.image + ")";
   });
@@ -268,12 +289,70 @@ spouseRectangles
   .attr("fill", function (d) {
     return "url(#" + d.data.image + ")";
   })
+  .on("mouseover", function (d) {
+    // issue how to return pivot to flask
+    pivot = d.data.name;
+    console.log(pivot);
+    return pivot;
+  })
   .classed("hide", function (d) {
     if (d.data.name.includes("_spouse")) return true;
     else return false;
   });
 
+/////////////////////////////////////////
+// Add button --------------------------
+///////////////////////////////////////
+
+// var add = svg.append("g").selectAll("circle").data(information.descendants());
+
+var add_spouse = svg
+  .append("g")
+  .selectAll("circle")
+  .data(spouse_information.descendants());
+
+// add
+//   .enter()
+//   .append("circle")
+//   .attr("cx", function (d) {
+//     return d.x;
+//   })
+//   .attr("cy", function (d) {
+//     return d.y;
+//   })
+//   .attr("r", 5)
+//   .attr("fill", function (d) {
+//     return "url(#" + "plus.png" + ")";
+//   })
+//   .on("click", function (d) {
+//     pivot = d.data.name;
+//     console.log(pivot);
+//     return pivot;
+//   });
+
+add_spouse
+  .enter()
+  .append("circle")
+  .attr("cx", function (d) {
+    return d.x + 100;
+  })
+  .attr("cy", function (d) {
+    return d.y;
+  })
+  .attr("r", 50)
+  .attr("fill", function (d) {
+    return "url(#" + "plus.png" + ")";
+  })
+  .on("click", function (d) {
+    pivot = d.data.name;
+    console.log(pivot);
+    return pivot;
+  });
+
+/////////////////////////////////////////////////////////////////////////
 // Names----------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////
+
 var names = svg.append("g").selectAll("text").data(information.descendants());
 var spouse_names = svg
   .append("g")

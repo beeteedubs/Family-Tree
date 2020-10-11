@@ -22,9 +22,17 @@ from flask_login import (
 from .models import family_input2, users
 from . import db
 
-
-# @app.route("/display/<string:pivot>") Shoumyo's idea for onclick
 main = Blueprint("main", __name__)
+
+
+@main.route("/pivot/<int:id>", methods=["GET", "POST"])
+def pivot():
+    entry = family_input2.query.get_or_404(id)
+    entries = family_input2.query.order_by(family_input2.id).all()
+    entries.remove(entry)
+    return redirect("/tree")
+
+    # return render_template("index.html", entries=entries)
 
 
 @main.route("/tree", methods=["GET", "POST"])
@@ -58,8 +66,8 @@ def index():
         except:
             return "don goofed"
     else:
-        entries = family_input2.query.order_by(family_input2.id).all()
-        # entries = family_input2.query.filter_by(userid=current_user.id).all()
+        # entries = family_input2.query.order_by(family_input2.id).all()
+        entries = family_input2.query.filter_by(userid=current_user.id).all()
         return render_template("index.html", entries=entries)
 
 
