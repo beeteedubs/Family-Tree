@@ -1,4 +1,5 @@
 import os
+
 from flask import (
     Flask,
     render_template,
@@ -26,7 +27,7 @@ main = Blueprint("main", __name__)
 
 
 @main.route("/pivot/<int:id>", methods=["GET", "POST"])
-def pivot():
+def pivot(id):
     entry = family_input2.query.get_or_404(id)
     entries = family_input2.query.order_by(family_input2.id).all()
     entries.remove(entry)
