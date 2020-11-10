@@ -1,4 +1,4 @@
 instance/
-family_env/
+# family_env/
 __pycache__/
 .vscode/
