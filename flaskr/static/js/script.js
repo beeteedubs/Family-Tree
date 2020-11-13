@@ -123,6 +123,7 @@ function zoomed() {
   svg.attr("transform", d3.event.transform);
 }
 
+
 var defs = svg.append("defs");
 var spouse_defs = svg.append("defs");
 var add_def = svg.append("defs");
@@ -265,8 +266,8 @@ rectangles
   .attr("height", img_height)
   .attr("width", img_width)
   .attr("class", "rect")
-  .on("mouseover", function (d) {
-    pivot = d.data.name;
+  .on("click", function (d) {
+    pivot = d.data.name; // same sa d.id since made id = name
     console.log(pivot);
     return pivot;
   })
@@ -289,9 +290,9 @@ spouseRectangles
   .attr("fill", function (d) {
     return "url(#" + d.data.image + ")";
   })
-  .on("mouseover", function (d) {
+  .on("click", function (d) {
     // issue how to return pivot to flask
-    pivot = d.data.name;
+    pivot = d.id; //provides name
     console.log(pivot);
     return pivot;
   })
@@ -299,6 +300,7 @@ spouseRectangles
     if (d.data.name.includes("_spouse")) return true;
     else return false;
   });
+
 
 /////////////////////////////////////////
 // Add button --------------------------
@@ -353,6 +355,10 @@ add_spouse
 // Names----------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////
 
+// why do we say "selectAll" when we didn't create any texts?
+// https://medium.com/@binyamin/d3-select-selectall-data-enter-and-exit-f0e4f0d3e1d0 
+// doesn't what if "selectAll('a') or selectAll('body')" since nothing inside 'g'
+
 var names = svg.append("g").selectAll("text").data(information.descendants());
 var spouse_names = svg
   .append("g")
@@ -361,6 +367,10 @@ var spouse_names = svg
 
 names
   .enter()
+  .append('a')
+  .attr('href',function(d){
+    return '/pivot' + d.data
+  })  
   .append("text")
   .text(function (d) {
     return d.data.name;
@@ -371,6 +381,7 @@ names
   .attr("y", function (d) {
     return d.y + 35;
   });
+
 
 spouse_names
   .enter()
@@ -388,6 +399,7 @@ spouse_names
     if (d.data.name.includes("_spouse")) return true;
     else return false;
   });
+
 
 // DRAG AND DROP SHIT
 $(document).ready(function () {
