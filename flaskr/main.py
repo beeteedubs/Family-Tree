@@ -26,6 +26,11 @@ from . import db
 main = Blueprint("main", __name__)
 
 
+@main.route("/random")
+def randomz():
+    return "hello world"
+
+
 @main.route("/pivot/<int:id>", methods=["GET", "POST"])
 def pivot(id):
     entry = family_input2.query.get_or_404(id)
