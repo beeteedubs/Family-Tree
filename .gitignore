@@ -1,0 +1,4 @@
+instance/
+family_venv/
+__pycache__/
+.vscode/
