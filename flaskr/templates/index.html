@@ -1,7 +1,10 @@
 {% extends 'base.html' %} {% block javascript %}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+<link
+  rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+/>
 <script>
   var orphans = [];
   var dummy = [];
@@ -19,6 +22,7 @@
     mother: "{{ entry.mother }}",
     image: "{{ entry.image }}",
     spouse: "{{ entry.spouse}}",
+    id: "{{ entry.id }}",
   })
   {% endif %}
 
@@ -28,6 +32,7 @@
     mother: "{{ entry.mother }}",
     image: "{{ entry.image }}",
     spouse: "{{ entry.spouse}}",
+    id:"{{ entry.id }}",
   })
   {% endfor %}
 </script>
@@ -95,6 +100,15 @@
     <input type="submit" name="Add Task" />
   </form>
 </div>
+<svg>
+  <g class="dropdown">
+    <a href="/update/123"><text x="100" y="100">AJFDKSALFDJSKLF</text></a>
+    <a href="/update/122">
+      <text x="100" y="120">fdfdffdfddffdf</text>
+      <
+    </a>
+  </g>
+</svg>
 <div class="content">
   {% if entries|length < 1 %}
   <h4 style="text-align: center">

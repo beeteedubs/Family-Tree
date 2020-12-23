@@ -2,6 +2,12 @@
   margin: 0;
   font-family: sans-serif;
 } */
+.dropdown {
+  color: black;
+  padding: 12px 6px;
+  text-decoration: none;
+  display: block;
+}
 rect {
   stroke: black;
 }

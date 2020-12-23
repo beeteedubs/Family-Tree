@@ -36,9 +36,9 @@ def pivot(id):
     entry = family_input2.query.get_or_404(id)
     entries = family_input2.query.order_by(family_input2.id).all()
     entries.remove(entry)
-    return redirect("/tree")
+    # return redirect("/tree")
 
-    # return render_template("index.html", entries=entries)
+    return render_template("index.html", entries=entries)
 
 
 @main.route("/tree", methods=["GET", "POST"])

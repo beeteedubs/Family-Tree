@@ -15,6 +15,7 @@ family_tree_data.push({
   parent: "",
   image: orphans[0].image,
   spouse: orphans[0].spouse,
+  id: orphans[0].id,
 }); // only push first orphan given
 
 while (dummy.length != family_tree_data.length) {
@@ -32,6 +33,7 @@ while (dummy.length != family_tree_data.length) {
           parent: entry.father,
           image: entry.image,
           spouse: entry.spouse,
+          id: entry.id,
         };
         family_tree_data.push(entry_obj);
         index = entries_js.indexOf(entry);
@@ -49,6 +51,7 @@ while (dummy.length != family_tree_data.length) {
           parent: entry.mother,
           image: entry.image,
           spouse: entry.spouse,
+          id: entry.id
         };
         family_tree_data.push(entry_obj);
         index = entries_js.indexOf(entry);
